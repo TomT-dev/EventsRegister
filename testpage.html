@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+  </head>
+  <body onload="initPage()">
+    <h1>Hello, system under test, come back later</h1>
+    <p id="loginInstructions">login init</p>
+    <script>
+    function initPage() {
+      // for testing
+      // localStorage.clear();
+      // console.log("local storage cleared")
+      // return;
+  /*
+  There are the following common data, stored in either session or local storage
+
+  n.b. initPage will test for support of session and local storage and will not proceed unless they are supported.
+  Edge,Chrome,Firefox and Safari all support this.
+
+  There are some data that is only maintained for the current browser session. 
+  This is stored in the browser session storage "sessionStorage"
+
+  sessionStorage.eventsList - stores the array of current events
+  This is derived from the select list downloaded with the web page, each time the page is loaded or refreshed
+
+  sessionStorage.todaysEventsList - stores the array of events for the current day
+
+  sessionStorage.sessionId - this stores the current session Id
+  Before login its value will be ???
+
+  There are also some settings data, which persist on the device for all futire sessions
+
+  localStorage.openWithTodaysEvent
+  If set this determines whether the main section is automatically opended with todays event
+  n.b. if there is more than one event for today, this setting is ignored and 
+
+  The following settings, determine the split of the screen and keyboard sizes for both portrait and landscape orientation.
+  initPage will set them to defaults if they are nto already set
+
+  localStorage.landscapeLeftSideWidth
+	localStorage.landscapeRightSideWidth
+	localStorage.landscapeKeySize
+	localStorage.portraitLeftSideWidth
+	localStorage.portraitRightSideWidth
+	localStorage.portraitKeySize
+
+  */
+
+  // localStorage.clear();
+  console.log("%cinitPage called", "color:blue; font-weight:bold; ");
+
+	try {
+    
+		if (typeof(Storage) !== "undefined") {
+
+      document.getElementById("loginInstructions").innerHTML = 'session storage exists'
+			// Code for localStorage/sessionStorage.
+			console.log('width = ' + window.innerWidth);
+			console.log('height = ' + window.innerHeight);
+
+    // extractEventsListToSessionStorage();
+    // extractTodaysEventListToSessionStorage()
+    // // retrieveEventsListFromSessionStorage();
+    // // retrieveTodaysEventListFromSessionStorage();
+    // retrieveScreenSplit_KeySize_FromLocalStorage();
+    // retrieveOpenWithTodaysEvent_FromLocalStorage_updateSettings();
+    // retrieveSelectedEventDetails_FromSessionStorage();
+    // setScreenSplitAndKeySize();
+   
+       
+    // check if session id exists and if not display login page
+
+  	if (isSessionStorageKey("sessionId")) {
+				console.log('session storage id exists');
+        sessionId = sessionStorage.sessionId;
+        var response = {};
+          response.sessionId = sessionId;
+          response.valid = true;
+          //responseHandlerCheckUserGetSessionId(response);
+			} else {
+				console.log('session storage id  does not exists,continuing to logon ');
+				document.getElementById("loginInstructions").innerHTML = " session storage id  does not exists,continuing ";
+				//document.getElementById("loginSection").style = "display:block;";
+			}
+
+
+		} else {
+			document.getElementById("loginInstructions").innerHTML = "sorry you cannot use this app on this browser";
+			console.log("sorry you cannot use this app on this browser");
+		}
+	} catch (err) {
+		console.log('error in initPage');
+		console.log(err.name);
+		console.log(err.message);
+		console.log(err.stack);
+    document.getElementById("loginInstructions").innerHTML = "an error has occurred " + err.name + '  ' + err.message + ' ' + err.stack;
+	}
+}
+
+function isSessionStorageKey(value){
+  var ssKeys = getSessionStorageKeys;
+  if(ssKeys().toString().indexOf(value) > -1  && sessionStorage.getItem(value)!= null){
+    return true;
+  } else{
+    return false;
+  }
+
+}
+
+function getSessionStorageKeys(){
+  var keys = [];
+  for(var i = 0 ; i < sessionStorage.length; i++){
+    keys.push(sessionStorage.key(i));
+  }
+  console.log(keys.length + " session keys = " + keys);
+   if(keys.length == 0){
+    console.log("there are no session keys");
+  } else {
+      for(var j = 0 ; j < keys.length; j++){
+      console.log(`${keys[j]}:${sessionStorage.getItem(keys[j])}`);
+      }
+  }
+  return keys;
+}
+    </script>
+  </body>
+</html>

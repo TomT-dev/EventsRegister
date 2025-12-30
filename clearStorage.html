@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<body onload="listKeys()">
+  <h1>Clear browser storage</h1>
+  <div>
+    <button type="button" onclick="clearLocalKeys()">Clear Local storage</button>
+    <button type="button" onclick="clearSessionKeys()">Clear Session storage</button>
+    <button type="button" onclick="listLocalKeys()">List storage</button>
+  </div>
+  <div>
+    <h2>Current Local storage keys</h2>
+    <p id="lsk"></p>
+  </div>
+  <div>
+    <h2>Current Session storage keys</h2>
+    <p id="ssk"></p>
+  </div>
+  <script>
+    function listKeys(){
+    listLocalKeys();
+    listSessionKeys();
+    }
+    
+    function clearLocalKeys(){
+    localStorage.clear();
+    listLocalKeys()
+    }
+    
+    function clearSessionKeys(){
+    sessionStorage.clear();
+    listSessionKeys();
+    }
+    
+    
+    function listLocalKeys(){
+    
+    console.log("%cCurrent Local storage keys", "color:blue; font-weight:bold; ");
+    let lskList = "";
+    
+	for(let i = 0; i < localStorage.length; i++) {
+		let key = localStorage.key(i);
+		let value = localStorage.getItem(key);
+		console.log(key, value);
+        lskList = lskList + `${key}, ${value}<br>`;
+     }
+    document.getElementById("lsk").innerHTML = lskList;
+    
+    }
+    
+    function listSessionKeys(){
+    let sskList = "";
+    console.log("%cCurrent Session storage keys", "color:blue; font-weight:bold; ");
+	for(let i = 0; i < sessionStorage.length; i++) {
+		let key = sessionStorage.key(i);
+		let value = sessionStorage.getItem(key);
+		console.log(key, value);
+        sskList = sskList + `${key}, ${value}<br>`;
+	}
+    document.getElementById("ssk").innerHTML = sskList;
+    
+   }
+  </script>
+</body>
+</html>

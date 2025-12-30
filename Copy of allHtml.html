@@ -1,0 +1,2473 @@
+<!DOCTYPE html>
+<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<base target="_top">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" charset='utf-8'>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.2/pdfmake.min.js" integrity="sha512-Yf733gmgLgGUo+VfWq4r5HAEaxftvuTes86bKvwTpqOY3oH0hHKtX/9FfKYUcpaxeBJxeXvcN4EY3J6fnmc9cA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.2/vfs_fonts.js" integrity="sha512-cktKDgjEiIkPVHYbn8bh/FEyYxmt4JDJJjOCu5/FQAkW4bc911XtKYValiyzBiJigjVEvrIAyQFEbRJZyDA1wQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+	<style>
+body {
+		font-family: Arial;
+		color: black;
+	}
+	
+	.split {
+		height: 100%;
+		width: 50%;
+		position: fixed;
+		z-index: 1;
+		top: 0;
+		overflow-x: hidden;
+		padding-top: 20px;
+	}
+	
+	.left {
+		left: 0;
+		width: 50%;
+		background-color: #f2f2f2;
+	}
+	
+	.right {
+		right: 0;
+		width: 50%;
+		background-color: none;
+    padding-left:0px;
+	}
+	
+	.centered {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		text-align: center;
+	}
+	
+	.centered img {
+		width: 150px;
+		border-radius: 50%;
+	}
+	/* buttons */
+	
+	.keyboard_button {
+		width: 40px;
+    height: 40px;
+		border-radius: 4px;
+    text-align: center;
+    padding-left:0px;
+    padding-right: 0px;
+    font-size: 20px;
+	}
+	
+	.button1 {
+		width: 100px;
+	}
+	
+	.printButton {
+		border: none;
+		background-color: white;
+	}
+	
+	.doActionButton {
+		font-family: DMSans, sans-serif;
+		width: 12vw;
+		font-size: 1.3vw;
+		background-color: #ffc700;
+		color: #005ab8;
+		border: 2px solid #005ab8;
+	}
+	
+	.cancelButton {
+		font-size: 1.5vw;
+		width: 6vw;
+		background-color: #005ab8;
+		color: white;
+		border: 2px solid #ffc700;
+	}
+	
+	.close_button {
+		background-color: #63c369;
+		color: white
+	}
+	
+	.edit_button {
+		background-color: #63c369;
+		color: white
+	}
+	
+	.open_button {
+		background-color: red;
+		color: white
+	}
+	
+	.wide-table-button {
+		font-family: DMSans, sans-serif;
+		font-size: 1.4vw;
+		color: #005ab8;
+		background-color: white;
+		border: 2px solid white;
+		text-align: left;
+	}
+	
+	.wide-yellow-button {
+		font-size: 1.5vw;
+		width: 25vw;
+		background-color: #ffc700;
+		color: #005ab8;
+		border: 2px solid #005ab8;
+	}
+	
+	.wide-blue-button {
+		font-size: 1.5vw;
+		width: 17vw;
+		background-color: #005ab8;
+		color: white;
+		border: 2px solid #ffc700;
+	}
+	
+	.saveButton {
+		border: none;
+		background-color: white;
+	}
+	
+	.material-icons.backspace {
+		font-size: 50px;
+		line-height: .3;
+		color: black;
+	}
+
+  .material-icons.backkey {
+		color: black;
+    font-size: 20px;
+		width: 40px;
+    height: 40px;
+		border: none;
+    text-align: center;
+    padding-left:0px;
+    padding-right: 0px;
+	}
+
+  .material-icons.gototop {
+		color: black;
+    background-color:none;
+    font-size: 1em;
+		width: 1.2em;
+    
+		border-radius: 4px;
+    text-align: center;
+    padding-left:0px;
+    padding-right: 0px;
+	}
+
+  .material-icons.nav {
+		font-size: 30px;
+		line-height: .3;
+		color: black;
+    background-color:none;
+	}
+	
+	.inputField {
+		font-family: DMSans, sans-serif;
+		width: 250px;
+		margin: 0;
+		margin: 0 0 7px 0;
+		color: white;
+	}
+	
+	label {
+		display: inline-block;
+		font-family: DMSans, sans-serif;
+		font-size: 1.3vw;
+		width: 8vw;
+	}
+	
+	.col_width1 {
+		width: 7.5vw;
+	}
+	
+	.wide.reg.column {
+		width: 40vw;
+	}
+	
+	.narrow.reg.column {
+		width: 10vw;
+	}
+	
+	.selectAction {
+		width: 100px;
+		height: 20px;
+	}
+	
+	.tableRow {
+		height: 20px;
+	}
+	
+	.keyboard-row {
+		margin-bottom: 5px;
+		display: block;
+		text-align: center;
+	}
+	
+	.form-row {
+		margin-bottom: 15px;
+		display: block;
+	}
+	
+	.title-row {
+		margin-bottom: 15px;
+		display: none;
+	}
+	/* Tables */
+	
+	table {
+		font-family: DMSans, sans-serif;
+		font-size: 1.2vw;
+		border-collapse: collapse;
+		width: 100%;
+	}
+
+  .tableFixHead {
+    overflow-y: auto; /* make the table scrollable if height is more than 200 px  */
+    height: 600px; /* gives an initial height of 200px to the table */
+  }
+  .tableFixHead thead th {
+    position: sticky; /* make the table heads sticky */
+    top: 0px; /* table head will be placed from the top of the table and sticks to it */
+    height:40px;
+      
+    
+  }
+
+  th,
+	
+	 td {
+        padding: 8px 16px;
+        border: 1px solid #ccc;
+      }
+	th {
+		border: 1px solid #2886e6;
+		text-align: left;
+		padding: 8px;
+    background: #eee;
+    
+	}
+	
+	header {
+		padding: 30px;
+	}
+	
+	.image-title-row {
+		font-family: DMSans, sans-serif;
+		font-size: 7vw;
+		color: #005ab8;
+		margin-top: 0px;
+		padding-top: 0px;
+		padding-left: 0px;
+		margin-left: 0px;
+		margin-bottom: 0px;
+	}
+	
+	.input-col {
+		display: inline;
+		/* the default for span */
+		width: 250px;
+		height: 20px;
+		padding: 5px;
+	}
+	/* Grids */
+	
+	.grid-container {
+		display: inline-grid;
+		grid-template-columns: 31.5vw 2vw;
+		padding: .5vw;
+		font-family: DMSans, sans-serif;
+	}
+  .instructions-grid-container {
+		display: inline-grid;
+		grid-template-columns: 4vw 36vw 4vw;
+		padding: .5vw;
+		font-family: DMSans, sans-serif;
+	}
+	
+	.select-grid-container {
+		display: inline-grid;
+		grid-template-columns: 42.5vw 5vw;
+		padding: .5vw;
+    font-family: DMSans, sans-serif;
+	}
+
+  .action-buttons-grid-container {
+		display: inline-grid;
+		grid-template-columns: 6vw 6vw 6vw 6vw 6vw 6vw;
+		padding: .5vw;
+		font-family: DMSans, sans-serif;
+    font-size: 0.875em; 
+    margin-left:3vw;
+	}
+	
+	.grid-item {
+		padding: .2vw .5vw .2vw .5vw;
+		font-size: 1.2vw;
+		text-align: left;
+		font-family: DMSans, sans-serif;
+	}
+	
+	.grid-item.ip {
+		font-size: 1.2vw;
+		text-align: right;
+		font-family: DMSans, sans-serif;
+	}
+
+  	.grid-item.icon {
+		font-size: 1.2vw;
+		text-align: left;
+    background-color: none;
+	}
+
+  .material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 48
+}
+	
+	.grid-item.bksp {
+		font-size: 1.2vw;
+		text-align: right;
+		font-family: DMSans, sans-serif;
+	}
+	
+	.grid-row-item {
+		padding: .2vw .5vw .2vw .5vw;
+		font-size: 1.2vw;
+		text-align: left;
+		grid-column: 1 / span 3;
+		font-family: DMSans, sans-serif;
+	}
+	
+	.grid-two-col-item {
+		padding: .2vw .5vw .2vw .5vw;
+		font-size: 1.2vw;
+		text-align: left;
+		grid-column: 1 / span 3;
+		font-family: DMSans, sans-serif;
+	}
+	/* input fields for use in grid */
+	
+	.single-line-input {
+		padding: 0.5vw;
+		font-size: 1.5vw;
+		text-align: left;
+		width: 69vw;
+		margin: 1vw;
+		font-family: DMSans, sans-serif;
+	}
+	
+	.two-col-input {
+		padding: 0.5vw;
+		font-size: 1.5vw;
+		text-align: left;
+		width: 80vw;
+		margin: 1vw;
+		font-family: DMSans, sans-serif;
+	}
+	
+	.text-box {
+		padding: 0.5vw;
+		font-size: 1.5vw;
+		text-align: left;
+		width: 69vw;
+		margin: 1vw;
+		font-family: DMSans, sans-serif;
+	}
+	
+	body {
+		margin: 0;
+		font-family: Arial, Helvetica, sans-serif;
+	}
+	
+	.topnav {
+		overflow: hidden;
+		background-color: #ffffff;
+	}
+	
+	.topnav a {
+		float: left;
+		color: #f2f2f2;
+		text-align: center;
+		padding: 14px 16px;
+		text-decoration: none;
+		font-size: 2.5vw;
+		width: 30vw;
+	}
+	
+	.topnav a:hover {
+		background-color: #ddd;
+		color: black;
+	}
+	
+	.topnav a.active {
+		background-color: #2886e6;
+		color: white;
+	}
+
+  .tableHeader {
+		height: 10px;
+	}
+	
+	.topnav a.musers {
+		background-color: #005ab8;
+		color: white;
+	}
+	
+	.topnav a.mbackup {
+		background-color: #63c369;
+		color: white;
+	}
+	
+	.topnav a.help {
+		background-color: white;
+		color: #005ab8;
+		float: left;
+		color: white;
+		text-align: center;
+		text-decoration: none;
+		font-size: 3vw;
+		width: 4vw;
+	}
+	
+	#progress-bar {
+		margin-top: 1em;
+		width: 100vw;
+		height: 1em;
+		background: red;
+		transition: 0.3s;
+	}
+	
+	input.larger {
+		width: 1vw;
+		height: 1vw;
+	}
+	/* Dashed border */
+	
+	hr.dashed {
+		border-top: 3px dashed #bbb;
+	}
+	/* Dotted border */
+	
+	hr.dotted {
+		border-top: 3px dotted #bbb;
+	}
+	/* Solid border */
+	
+	hr.solid {
+		border-top: 3px solid #bbb;
+	}
+	/* Rounded border */
+	
+	hr.rounded {
+		border-top: 8px solid #bbb;
+		border-radius: 5px;
+	}
+	
+	#registrationsTable {
+		display: block;
+	}
+}
+
+.slidecontainer {
+  width: 100%;
+}
+
+.slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 25px;
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+.slider:hover {
+  opacity: 1;
+}
+.eventSelectOption{
+}
+.hide {
+  display: none;
+}
+    
+.hovDIV:hover + .hide {
+  display: block;
+  color: gray;
+  font-size:.5vw;
+}
+
+.ssbutton:focus {
+  outline: none;
+}
+
+	</style>
+</head>
+
+<body onload="initPage()">
+<div id="loginSection" style="display:none;">
+	<div style="margin-left: 2vw; margin-right: 2vw;">
+		<label style="font-size: 2.5vw; width: 70vw; color:#63c369;"><b>Login</b></label>
+		<br>
+		<label>User Name</label>
+		<br>
+		<input type="text" id="login_username" placeholder="UserId" name="username">
+		<br>
+		<label>Password</label>
+		<br>
+		<input type="password" id="login_password" name="password" placeholder="password" />
+		<br>
+		<br>
+		<button id="loginbtn" onclick="login()" style="border-radius: 4px; ">Login</button>
+		<p id="loginInstructions"></p>
+	</div>
+</div>
+<div id="mainSection" style="display:none;">
+	<div id="leftSide" class="split left">
+		<div style="margin-left: 2vw; margin-right: 2vw;">
+			<div class="instructions-grid-container">
+				<div class="grid-item.ip">
+					<button id="showTuningBtn" onclick="showTuningControls()" style=" align:right; border:none; background-color: #f2f2f2;"><i class="material-icons nav" id="showTuningIcon" style="width:100%; height:auto; align:left;"><span class="material-icons">tune</span></i></button>
+				</div>
+				<div class="grid-item.ip">
+					<input type="text" id="copiedText" style="width:35vw; margin-bottom:2vw;" disabled placeholder="Filter table: Use virtual keyboard"> </div>
+			</div>
+			<div id="VirtualKey">
+				<div class="keyboard-row">
+					<input id="btn1" type="button" class="keyboard_button" style="font-size: 30px;" value=1 onclick="input(this);" />
+					<input id="btn2" type="button" class="keyboard_button" style="font-size: 30px;" value=2 onclick="input(this);" />
+					<input id="btn3" type="button" class="keyboard_button" style="font-size: 30px;" value=3 onclick="input(this);" />
+					<input id="btn4" type="button" class="keyboard_button" style="font-size: 30px;" value=4 onclick="input(this);" />
+					<input id="btn5" type="button" class="keyboard_button" style="font-size: 30px;" value=5 onclick="input(this);" />
+					<input id="btn6" type="button" class="keyboard_button" style="font-size: 30px;" value=6 onclick="input(this);" />
+					<input id="btn7" type="button" class="keyboard_button" style="font-size: 30px;" value=7 onclick="input(this);" />
+					<input id="btn8" type="button" class="keyboard_button" style="font-size: 30px;" value=8 onclick="input(this);" />
+					<input id="btn9" type="button" class="keyboard_button" style="font-size: 30px;" value=9 onclick="input(this);" />
+					<input id="btn0" type="button" class="keyboard_button" style="font-size: 30px;" value=0 onclick="input(this)" /> </div>
+				<div class="keyboard-row">
+					<input id="btnq" type="button" class="keyboard_button" style="font-size: 30px;" value="q" onclick="input(this);" />
+					<input id="btnw" type="button" class="keyboard_button" style="font-size: 30px;" value="w" onclick="input(this);" />
+					<input id="btne" type="button" class="keyboard_button" style="font-size: 30px;" value="e" onclick="input(this);" />
+					<input id="btnr" type="button" class="keyboard_button" style="font-size: 30px;" value="r" onclick="input(this);" />
+					<input id="btnt" type="button" class="keyboard_button" style="font-size: 30px;" value="t" onclick="input(this);" />
+					<input id="btny" type="button" class="keyboard_button" style="font-size: 30px;" value="y" onclick="input(this);" />
+					<input id="btnu" type="button" class="keyboard_button" style="font-size: 30px;" value="u" onclick="input(this);" />
+					<input id="btni" type="button" class="keyboard_button" style="font-size: 30px;" value="i" onclick="input(this);" />
+					<input id="btno" type="button" class="keyboard_button" style="font-size: 30px;" value="o" onclick="input(this);" />
+					<input id="btnp" type="button" class="keyboard_button" style="font-size: 30px;" value="p" onclick="input(this);" /> </div>
+				<div class="keyboard-row">
+					<input id="btna" type="button" class="keyboard_button" style="font-size: 30px;" value="a" onclick="input(this);" />
+					<input id="btns" type="button" class="keyboard_button" style="font-size: 30px;" value="s" onclick="input(this);" />
+					<input id="btnd" type="button" class="keyboard_button" style="font-size: 30px;" value="d" onclick="input(this);" />
+					<input id="btnf" type="button" class="keyboard_button" style="font-size: 30px;" value="f" onclick="input(this);" />
+					<input id="btng" type="button" class="keyboard_button" style="font-size: 30px;" value="g" onclick="input(this);" />
+					<input id="btnh" type="button" class="keyboard_button" style="font-size: 30px;" value="h" onclick="input(this);" />
+					<input id="btnj" type="button" class="keyboard_button" style="font-size: 30px;" value="j" onclick="input(this);" />
+					<input id="btnk" type="button" class="keyboard_button" style="font-size: 30px;" value="k" onclick="input(this);" />
+					<input id="btnl" type="button" class="keyboard_button" style="font-size: 30px;" value="l" onclick="input(this);" /> </div>
+				<div class="keyboard-row">
+					<input id="btnz" type="button" class="keyboard_button" style="font-size: 30px;" value="z" onclick="input(this);" />
+					<input id="btnx" type="button" class="keyboard_button" style="font-size: 30px;" value="x" onclick="input(this);" />
+					<input id="btnc" type="button" class="keyboard_button" style="font-size: 30px;" value="c" onclick="input(this);" />
+					<input id="btnv" type="button" class="keyboard_button" style="font-size: 30px;" value="v" onclick="input(this);" />
+					<input id="btnb" type="button" class="keyboard_button" style="font-size: 30px;" value="b" onclick="input(this);" />
+					<input id="btnn" type="button" class="keyboard_button" style="font-size: 30px;" value="n" onclick="input(this);" />
+					<input id="btnm" type="button" class="keyboard_button" style="font-size: 30px;" value="m" onclick="input(this);" /> </div>
+				<div class="keyboard-row">
+					<input id="spacebar" type="button" class="keyboard_button" style="font-size: 30px; width: 200px;" value=" " onclick="input(this);" />
+					<input id="backbtn" type="button" class="keyboard_button" style="font-size: 30px;" value="&larr" onclick="del()" /> </div>
+			</div>
+			<div id="screenAdjustment" style="display:none;">
+				<p>Screen split</p>
+				<input id="newSplit" type="range" min="1" max="100" value="50" class="slider">
+				<p>Keyboard size</p>
+				<input id="newKeySize" type="range" min="10" max="100" value="40" class="slider">
+				<br>
+				<br>
+				<button id="resetTuning" onclick="resetTuning()" style="border-radius: 4px; margin-right: 10px; margin-bottom:10px;">Reset screen splt and keyboard size to defaults</button>
+        <br>
+        <button id="clearLocalStorage" onclick="clearLocalStorage()" style="border-radius: 4px; margin-right: 10px; ">Clear all settings</button>
+			</div>
+		</div>
+		<div id="rightSide" class="split right">
+			<div id="topBox">
+				<div class="instructions-grid-container">
+					<div class="grid-item.ip">
+						<button id="showKbd" onclick="showKeyboard(false)" style="border-radius: 4px; align:left;  border:none; background-color:white; outline: none;"><i class="material-icons nav" id="showKbdIcon" style="width:100%; height:auto; "><span class="material-icons">chevron_left</span></i></button>
+					</div>
+					<div class="grid-item.ip">
+						<p id="mainInstructions" style="color:black; font-weight:bold; font-size:1vw; height:1vw;"></p>
+					</div>
+					<div class="grid-item.ip">
+						<i class="material-icons md-40" id="setDeviceStyleIcon" style="width:100%; height:auto; margin-left: auto; margin-right: auto;">stay_current_landscape</i>
+					</div>
+				</div>
+				<br>
+				<div class="action-buttons-grid-container">
+					<button id="refreshBtn" onclick="updateTable()" style=" align:right;  background-color: white; margin: 0.1vw 1vw 0.1vw 1vw; border-radius: 5px;"><i class="material-icons nav" style="width:100%; height:auto; align:left;"><span class="material-icons" id = "refreshBtnIcon" style = "padding-top:.25vw;">cloud_sync</span></i></button>
+					<button id="toggleShowMembers" value="yes" onclick="toggleShowMembers()" style=" align:right;  background-color: white; margin: 0.1vw 1vw 0.1vw 1vw; border-radius: 5px;"><i class="material-icons nav" style="width:100%; height:auto; align:left;"><span class="material-icons" id = "toggleShowMembersIcon" style = "padding-top:.25vw;">expand_less</span></i></button>
+					<button id="addGuest" value="yes" onclick="addGuest()" style=" align:right;  background-color: white; margin: 0.1vw 1vw 0.1vw 1vw; border-radius: 5px;"><i class="material-icons nav" style="width:100%; height:auto; align:left;"><span class="material-icons" id = "addGuestIcon" style = "padding-top:.25vw;">person_add</span></i></button>
+					<button id="emailReg" value="yes" onclick="emailReg()" style=" align:right;  background-color: white; margin: 0.1vw 1vw 0.1vw 1vw; border-radius: 5px;"><i class="material-icons nav" style="width:100%; height:auto; align:left;"><span class="material-icons" id = "emailRegIcon" style = "padding-top:.25vw;">mail</span></i></button>
+					<button id="showTodayBtn" onclick="toggleOpenMode()" style=" align:right;  background-color: white; margin: 0.1vw 1vw 0.1vw 1vw; border-radius: 5px;"><i class="material-icons nav" style="width:100%; height:auto; align:left;"><span class="material-icons" id = "showTodayIcon" style = "padding-top:.25vw; background-color:none;">today</span></i></button>
+          <button id="showUpdateOptionsBtn" onclick="showUpdateOptions()" style=" align:right;  background-color: white; margin: 0.1vw 1vw 0.1vw 1vw; border-radius: 5px;"><i class="material-icons nav" style="width:100%; height:auto; align:left;"><span class="material-icons" id = "showUpdateOptionsIcon" style = "padding-top:.25vw; background-color:none;">sync</span></i></button>
+				</div>
+        <div id = "updateMembersSection" style = "display:none; margin-left:4vw; margin-right:4vw;">
+            <hr class="solid">
+            <h2>Reload the current register with the master from the server.</h2>
+            <p style = "width:40vw;">More than one person may update the register - to refresh the register on your device with any registrations made by others on another device, click the button below</p>
+            <button id="refreshBtn2" onclick="updateTable()" style=" align:right;  background-color: white; margin: 1vw 0vw 1vw 0vw; border-radius: 5px;">Reload the current register with the master from the server</button>
+            <h2>Update list of members with new members.</h2>
+            <p style = "width:40vw;">If a new member has been added to the web member database since this register was first opended they will not be included. To add any new members click the buton below. n.b This will retain any registrations you have made and will just add any new members to the list so that you can register them if you wish. If new members have been added to Beacon but not added to the member database, you need to download the member data from Beacon and upload it using the options below.</p>
+            <button id="refreshMembersBtn" onclick="refreshMembers()" style=" align:right;  background-color: white; margin: 1vw 0vw 1vw 0vw; border-radius: 5px;">Update list of members with new members</button>
+            <h2>Overwrite web member data with Beacon data.</h2>
+            <p style = "width:40vw;"> To overwrite the web member data with the master data stored in Beacon and at the same time add any new members to the current register, download the Members and Addresses file (in the default EXCEL format) from the <a href="https://u3abeacon.org.uk/dataexport.php" target="_blank">Beacon Data Export and Backup</a> page to your device, and import it using the button below. n.b. Only the membership secretary, the webmaster and certain other committee members are authorised to perfrom this function.</p>
+            <input type="file" id="inputMemberData" />
+            <p id="uploadStatus" style="color:red;"></div>
+            <hr class="solid">
+          </div>
+				<div id="addGuestSection" style="margin-left:5vw; display:none;">
+					<h2 id="addGuestTitle">Register a guest</h2>
+					<input type="text" id="guestTitle" style="width:30vw; margin-bottom:2vw;" placeholder="Title">
+					<br>
+					<input type="text" id="guestForename" style="width:30vw; margin-bottom:2vw;" placeholder="Forename">
+					<br>
+					<input type="text" id="guestSurname" style="width:30vw; margin-bottom:2vw;" placeholder="Surname">
+					<br>
+					<input type="text" id="guestPhone" style="width:30vw; margin-bottom:2vw;" placeholder="Contact number (for emergency use only)">
+					<br>
+					<button id="regGuest" onclick="registerGuest()" style="border-radius: 4px; margin-right: 10px; ">Register</button>
+				</div>
+				<br>
+				<div class="select-grid-container">
+					<div class="grid-item">
+						<select name="events" id="eventsList" style="padding:.5vw 0vw .5vw 0vw; width:39vw; margin-left:4vw;">
+							<?!= getEventListSelectHtml();?>
+						</select>
+					</div>
+					<div class="grid-item"> </div>
+				</div>
+				<div id="rightArea" style="margin-left: 1vw; margin-right: 2vw;">
+					<div style="margin-left: 4vw; margin-right: 2vw;">
+						<div>
+							<button id="savedSearch" class="ssbutton" value="yes" onclick="savedSearch()" style=" align:right;  background-color: white; border: none;"><i class="material-icons nav" style="width:100%; height:auto; align:left;"><span class="material-icons" id = "savedSearchIcon" style = "padding-top:.25vw;">saved_search</span></i></button>
+							<input type="text" id="showMemberMatches" onkeyup="filterMemberTable()" style="width:30vw; margin-bottom:0vw;" placeholder="Filter table:Click in here to use device keyboard" title="Type in a name">
+							<button id="clearSearch" class="ssbutton" value="yes" onclick="clearSearch()" style=" align:right;  background-color: white; border: none;"><i class="material-icons nav" style="width:100%; height:auto; align:left;"><span class="material-icons material-symbols-outlined" id = "clearSearchIcon" style = "padding-top:.25vw; colour:black; background-color:white;">backspace</span></i></button>
+						</div>
+							<div class="grid-container">
+								<div class="grid-item.ip">
+									<label id="eventRegisterFor" style="font-size: 1.5vw; width: 65vw; color:#63c369;"><b></b></label>
+								</div>
+							</div>
+					</div>
+				</div>
+			</div>
+			<div id="rightArea2" style="margin-left: 1vw; margin-right: 2vw;">
+				<div style="margin-left: 4vw; margin-right: 2vw;">
+					<div class="tableFixHead">
+						<table id="membersTable" style="font-size: 1.5vw; display:none; scale: 1;"> </table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+			<script>
+			var sessionId = null;
+var data;
+//console.log('1111');
+
+var leftSideWidth;
+var rightSideWidth;
+var keySize;
+var keyTextSize;
+var keyboardHidden = false;
+var device = "desktop";
+var hideNonAttendees = false;
+var regData = [];
+var showTuningControl = false;
+var showAddGuest = false;
+var showToday;
+var numAttendees = 0;
+var eventsList = [];
+var todaysEventsList;
+var sessionId;
+var selectedEventDetails;
+var currentMessage,currentMessageColour;
+var landscapeLeftSideWidth,landscapeRightSideWidth,landscapeKeySize;
+var portraitLeftSideWidth, portraitRightSideWidth, portraitKeySize;
+var filterText;
+
+
+
+function initPage()  {
+      // for testing
+      // localStorage.clear();
+      // console.log("local storage cleared")
+      // return;
+  /*
+  There are the following common data, stored in either session or local storage
+
+  n.b. initPage will test for support of session and local storage and will not proceed unless they are supported.
+  Edge,Chrome,Firefox and Safari all support this.
+
+  There are some data that is only maintained for the current browser session. 
+  This is stored in the browser session storage "sessionStorage"
+
+  sessionStorage.eventsList - stores the array of current events
+  This is derived from the select list downloaded with the web page, each time the page is loaded or refreshed
+
+  sessionStorage.todaysEventsList - stores the array of events for the current day
+
+  sessionStorage.sessionId - this stores the current session Id
+  Before login its value will be ???
+
+  There are also some settings data, which persist on the device for all futire sessions
+
+  localStorage.openWithTodaysEvent
+  If set this determines whether the main section is automatically opended with todays event
+  n.b. if there is more than one event for today, this setting is ignored and 
+
+  The following settings, determine the split of the screen and keyboard sizes for both portrait and landscape orientation.
+  initPage will set them to defaults if they are nto already set
+
+  localStorage.landscapeLeftSideWidth
+	localStorage.landscapeRightSideWidth
+	localStorage.landscapeKeySize
+	localStorage.portraitLeftSideWidth
+	localStorage.portraitRightSideWidth
+	localStorage.portraitKeySize
+
+  */
+
+  // localStorage.clear();
+  console.log("%cinitPage called", "color:blue; font-weight:bold; ");
+
+	try {
+    initPage
+		if (typeof(Storage) !== "undefined") {
+			// Code for localStorage/sessionStorage.
+			console.log('width = ' + window.innerWidth);
+			console.log('height = ' + window.innerHeight);
+
+    extractEventsListToSessionStorage();
+    extractTodaysEventListToSessionStorage()
+    // retrieveEventsListFromSessionStorage();
+    // retrieveTodaysEventListFromSessionStorage();
+    retrieveScreenSplit_KeySize_FromLocalStorage();
+    retrieveOpenWithTodaysEvent_FromLocalStorage_updateSettings();
+    detectDeviceType();
+    retrieveSelectedEventDetails_FromSessionStorage();
+    setScreenSplitAndKeySize();
+    
+    console.log(` window orientation ${screen.orientation.type}`);
+   
+       
+    // check if session id exists and if not display login page
+
+  	if (isSessionStorageKey("sessionId")) {
+				console.log('session storage id exists');
+        sessionId = sessionStorage.sessionId;
+        var response = {};
+          response.sessionId = sessionId;
+          response.valid = true;
+          response.userName = sessionStorage.userName;
+          responseHandlerCheckUserGetSessionId(response);
+			} else {
+				console.log('session storage id  does not exists,continuing to logon ');
+				document.getElementById("loginInstructions").innerHTML = escapeHTMLPolicy.createHTML(" session storage id  does not exists,continuing ");
+				document.getElementById("loginSection").style = "display:block;";
+			}
+
+
+		} else {
+			document.getElementById("loginInstructions").innerHTML = "sorry you cannot use this app on this browser";
+			console.log("sorry you cannot use this app on this browser");
+		}
+	} catch (err) {
+		console.log('error in initPage');
+		console.log(err.name);
+		console.log(err.message);
+		console.log(err.stack);
+    document.getElementById("loginInstructions").innerHTML = "an error has occurred " + err.name;
+	}
+}
+
+function login() {
+  console.log("%clogin called", "color:blue; font-weight:bold; ");
+  const loginInstructions = document.getElementById("loginInstructions");
+  loginInstructions.innerHTML = 'starting check';
+  const username = document.getElementById("login_username").value;
+  const password = document.getElementById("login_password").value;
+  const screenWidth = window.innerWidth;
+  const screenHeight = window.innerHeight;
+  console.log('width = ' + screenWidth);
+  
+  if (username.length > 0 && password.length > 0) {
+    google.script.run.withSuccessHandler(responseHandlerCheckUserGetSessionId)
+      .checkUserGetSessionId(username, password, screenWidth, screenHeight);
+  } else {
+    loginInstructions.innerHTML = 'you must supply both a username and password';
+  }
+}
+
+function responseHandlerCheckUserGetSessionId(response) {
+  console.log("%cresponseHandlerCheckUserGetSessionId called", "color:red; font-weight: bold;");	
+	console.log(response);
+
+	if (response.valid) {
+
+    // set and save the sessionId
+    ;
+    sessionStorage.sessionId = response.sessionId.toString();
+    sessionId = sessionStorage.sessionId;
+    document.getElementById("loginSection").style = "display:none;";
+		document.getElementById("mainSection").style = "display:block;";
+    sessionStorage.userName = response.userName;
+
+    var response = {};
+    
+
+		// check to see if current Event set
+    console.log("checking selected event length, " + selectedEventDetails)
+    if (!isSessionStorageKey("selectedEventDetails")){
+      console.log("selectedEventDetails is undefined"); 
+      console.log("openWithTodaysEvent = " + localStorage.openWithTodaysEvent)
+
+      if(localStorage.openWithTodaysEvent.indexOf("all") > -1 ){   
+        console.log("%clocalStorage.openWithTodaysEvent is set to allEvents", "color:green;"); 
+        console.log(sessionStorage.todaysEventsList);
+        console.log(typeof sessionStorage.todaysEventsList);
+        console.log(JSON.parse(sessionStorage.todaysEventsList));
+        console.log(typeof JSON.parse(sessionStorage.todaysEventsList));
+        console.log("todaysEventsList.length = " + JSON.parse(sessionStorage.todaysEventsList).length );
+          if(JSON.parse(sessionStorage.todaysEventsList).length > 0){    
+            console.log('setting icon to give switching to todays events')
+            document.getElementById("showTodayIcon").innerHTML = "today";
+          } else {
+            console.log('greying out icon and disabling switch to todays events cos there arent any')
+            document.getElementById("showTodayIcon").style.color = "lightgray";
+            document.getElementById("showTodayIcon").innerHTML = "event_busy";
+            document.getElementById("showTodayIcon").style.background = "none";
+            document.getElementById("showTodayBtn").style.background = "#f2f2f2";
+            document.getElementById("showTodayBtn").disabled = true;
+          }        
+        console.log("setting local storage to allEvents");
+        localStorage.openWithTodaysEvent = "allEvents";
+        console.log("%cresponseHandlerCheckUserGetSessionId calling showAllEvents()", "color:#ff33cc;");
+        showAllEvents();       
+      } else {
+        console.log("%clocalStorage.openWithTodaysEvent is set to todaysEvents", "color:green;");
+        console.log('setting icon to todays event only');
+        document.getElementById("showTodayIcon").innerHTML = "calendar_month";
+        showTodaysEvents();
+      };
+  
+		} else {
+      console.log("selectedEventDetails is set and = " + selectedEventDetails);
+      console.log('server function getRegisteredMembersData called for event ' + selectedEventDetails + ' with session id = ' + sessionId);
+      var data = [sessionId, selectedEventDetails.slice(0,7)];
+      google.script.run.withSuccessHandler(makeTable).getRegisteredMembersData(JSON.stringify(data))
+		}
+    
+	} else {
+    console.log("invalid username or password");
+		document.getElementById("loginInstructions").innerHTML = 'Invalid username or password, please try again';
+	}
+  sendDeviceDetails();
+}
+
+
+
+// function getMemberTable(eventDetails, sessionId) {
+// 	console.log('get member table called for event ' + eventDetails + ' with session id = ' + sessionId);
+//   selectedEventDetails = eventDetails;
+// 	var data = [sessionId, eventDetails.slice(0,7)];
+// 	google.script.run.withSuccessHandler(makeTable).getRegisteredMembersData(JSON.stringify(data));
+// };
+
+function getEventsThenMakeTable(response){
+  console.log("%cgetEventsThenMakeTable called with " + response, "color:blue; font-weight:bold; ");	
+	var sessionIdOk = response.sessionIdOk;
+	sessionId = sessionStorage.sessionId;
+	//console.log(sessionIdOk + ' ' + sessionId);
+	//console.log()
+	if (sessionIdOk == 'ok') {
+		eventsList = response.eventsList;
+		//console.log(eventsList);
+		//console.log(eventsList[0]); 
+    // switch the view from login to events
+    document.getElementById("loginSection").style = "display:none;";
+		document.getElementById("mainSection").style = "display:block;";
+    // set the screen split
+    setScreenSplitAndKeySize();
+
+    var data = [sessionId, selectedEventDetails.slice(0,7)];
+    google.script.run.withSuccessHandler(makeTable).getRegisteredMembersData(JSON.stringify(data))
+
+  	} else {
+		document.getElementById("loginSection").style = "display:block;";
+	}
+
+}
+
+function fillMemberTable(memberTable) {
+  console.log("%cfillMemberTable called","color:blue; font-weight:bold; ")
+	//console.log(memberTable)
+  document.getElementById("loginSection").style = "display:none;";
+	document.getElementById("mainSection").style = "display:block;";
+	document.getElementById("eventRegisterFor").innerHTML = selectedEventDetails + ", " + numAttendees + " in person";
+	document.getElementById("membersTable").innerHTML = memberTable;
+	document.getElementById("membersTable").style = "display:block; scale:1;";
+  console.log("styles set")
+  if(localStorage.openWithTodaysEvent.indexOf("today")> -1){
+  document.getElementById("eventsList"),innerHTML = sessionStorage.todaysEventsListHtml;
+  document.getElementById("showTodayIcon").innerHTML = "calendar_month";
+  } else {
+    document.getElementById("eventsList"),innerHTML = sessionStorage.eventsListHtml;
+    document.getElementById("showTodayIcon").innerHTML = "today";
+  }initPage
+  document.getElementById("eventsList").value = sessionStorage.selectedEventDetails
+	document.getElementById("reg_0000").focus();
+}
+
+function showAllEvents(){
+   console.log("%cshowAllEvents called", "color:blue; font-weight:bold; ");
+    document.getElementById("loginSection").style = "display:none;";
+    document.getElementById("mainSection").style = "display:block;";
+    document.getElementById("membersTable").style = "display:block;";
+    document.getElementById("eventRegisterFor").innerHTML = "";
+  	document.getElementById("membersTable").innerHTML = "";
+	  var eventsListHtml = '<option value="" disabled selected hidden>Select an event</option>';
+    console.log("///////////////////////////////////////////////////////// type of events array = " + typeof eventsList);
+    for (var i = 0; i < eventsList.length; i++) {
+      eventsListHtml = eventsListHtml + `<option value="${eventsList[i].toString().slice(0,19)}">${eventsList[i]}</option>`; 
+
+    }
+    console.log("showAllEvents, eventsListHtml follows");
+    console.log(eventsListHtml);
+    console.log("showAllEventsreseting drop down, selected event to all events");
+    document.getElementById("eventsList").innerHTML = eventsListHtml;
+    document.getElementById("membersTable").style = "display:block;";
+    document.getElementById("eventRegisterFor").innerHTML = "Please select an event";
+
+}
+
+function showTodaysEvents() {
+  console.log("%cshowTodaysEvents called", "color:blue; font-weight:bold; ");
+  console.log("show todays Events ");
+  document.getElementById("loginSection").style = "display:none;";
+  document.getElementById("mainSection").style = "display:block;";
+  document.getElementById("membersTable").style = "display:none;"
+  var eventsListHtml = '<option value="" disabled selected hidden>Select an event</option>';;
+        for (var i = 0; i < todaysEventsList.length; i++) {
+          eventsListHtml = eventsListHtml + `<option value="${todaysEventsList[i].toString().slice(0,19)}">${todaysEventsList[i]}</option>`;
+          
+        }
+    
+    console.log("todaysEventsList.length = " + todaysEventsList.length) ;
+    console.log(eventsListHtml); 
+
+    if (todaysEventsList.length == 0) {
+      document.getElementById("eventRegisterFor").innerHTML = "There are no events today, showing all events";
+      document.getElementById("mainInstructions").innerHTML = "There are no events today, showing all events";
+      console.log("There are no events today, showing all events")
+      setToggleToAllEvents()
+    } else if (todaysEventsList.length == 1) {
+
+      console.log("setting event list to today only");
+			eventsListHtml = `<option value="${todaysEventsList[0].toString().slice(0,19)}"  selected>${todaysEventsList[0]}</option>`;
+      document.getElementById("eventsList").innerHTML = eventsListHtml;
+      // set the selected event details in session storage
+			sessionStorage.selectedEventDetails = todaysEventsList[0].toString().slice(0,19);
+      selectedEventDetails = sessionStorage.selectedEventDetails; 
+			document.getElementById("membersTable").style = "display:block;";
+			document.getElementById("eventRegisterFor").innerHTML = selectedEventDetails;
+      console.log('selectedEventDetails set as ' + selectedEventDetails);
+      console.log("calling updateTable")
+			updateTable();
+
+		} else {
+
+      var eventsListHtml = '<option value="" disabled selected hidden>Select an event</option>';
+        for (var i = 0; i < todaysEventsList.length; i++) {
+      eventsListHtml = eventsListHtml + `<option value="${todaysEventsList[i].toString().slice(0,19)}">${todaysEventsList[i]}</option>`; 
+      console.log("showTodaysEvents, more than one event today, eventsListHtml follows");
+      console.log(eventsListHtml);
+      }
+      console.log("show todaysEvent reseting drop down to multiple events, selected event to all events");
+      document.getElementById("eventsList").innerHTML = eventsListHtml;
+      document.getElementById("membersTable").style = "display:block;";
+      document.getElementById("eventRegisterFor").innerHTML = "There is more than one event today, please select one";
+
+    } 
+	
+}
+
+function showKeyboard(flag) { // used to show split or full screen
+	console.log("%cshow kb called","color:blue; font-weight:bold; ");
+	//console.log(flag);
+
+	const leftSideElement = document.getElementById("leftSide");
+	const rightSideElement = document.getElementById("rightSide");
+	const showKbdIconElement = document.getElementById("showKbdIcon");
+	const showKbdElement = document.getElementById("showKbd");
+	const screenWidth = window.innerWidth;
+	const screenHeight = window.innerHeight;
+
+	if (flag) {
+		if (screenWidth >= screenHeight) {
+			leftSideElement.style.width = localStorage.landscapeLeftSideWidth;
+			rightSideElement.style.width = localStorage.landscapeRightSideWidth;
+		} else {
+			leftSideElement.style.width = localStorage.portraitLeftSideWidth;
+			rightSideElement.style.width = localStorage.portraitRightSideWidth;
+		}
+		showKbdIconElement.innerHTML = "chevron_left";
+		showKbdElement.setAttribute("onclick", "showKeyboard(false)");
+    keyboardHidden = false;
+	} else {
+		leftSideElement.style.width = "0%";
+		rightSideElement.style.width = "100%";
+		showKbdIconElement.innerHTML = "navigate_next";
+		showKbdElement.setAttribute("onclick", "showKeyboard(true)");
+    keyboardHidden = true;
+	}
+}
+
+
+function toggleShowMembers() {
+	console.log("%ctoggleShowMembers called","color:blue; font-weight:bold; ");
+	//console.log(hideNonAttendees)	
+
+	const showMemberMatchesElement = document.getElementById("showMemberMatches");
+	const toggleShowMembersIconElement = document.getElementById("toggleShowMembersIcon");
+
+	if (!hideNonAttendees) {
+		//console.log('hiding');
+		hideNonAttendees = true;
+		showMemberMatchesElement.value = ":true";  
+		toggleShowMembersIconElement.innerHTML = "expand_more";
+		filterMemberTable();
+	} else {
+		//console.log('showing');
+		hideNonAttendees = false;
+		showMemberMatchesElement.value = "";
+		toggleShowMembersIconElement.innerHTML = "expand_less";
+		filterMemberTable();
+	}
+};
+
+
+
+function filterMemberTable() {
+  console.log("%cfilterMemberTablecalled","color:blue; font-weight:bold; ");
+  // hide virtual keyboard if it is already hidden
+  if(keyboardHidden){
+    console.log('hiding keyboard');
+    showKeyboard(false);
+  } else {
+    console.log('showing keyboard');
+    showKeyboard(true);
+  }  
+  // get the search term
+ 	const filter = document.querySelector('#showMemberMatches').value.toUpperCase();
+   console.log("filter = " + filter);
+   // get the table rows
+	const trs = document.querySelectorAll('#membersTable tr:not(.tableHeader)');
+  // set the display style for each row to none if any of the cells contain the search term
+	trs.forEach(tr => tr.style.display = [...tr.children].find(td => td.innerHTML.toUpperCase().includes(filter)) ? '' : 'none');
+}
+
+
+function getStatus(mnum) {
+  console.log("%cgetStatus called","color:blue; font-weight:bold; ");
+	// get the persons status
+	var thisPerson = regData.map(value => {
+		if (value[0].toString() == mnum.toString()) {
+			return value;
+		};
+	}).filter(value => value != null)[0];
+
+	console.log(thisPerson);
+	return thisPerson
+}
+
+function updateStatus(mnum, ref, val) {
+  console.log("%cupdateStatus called " + mnum + " " + ref + " " + val,"color:blue; font-weight:bold; ");
+  console.log('status on enter is');
+	getStatus(mnum);
+	console.log('updating status ' + mnum + ' ' + ref + ' ' + val);
+	for (var i = 0; i < regData.length; i++) {
+		if (regData[i][0].toString() == mnum.toString()) {
+			regData[i][ref] = val;
+		}
+	}
+  console.log('status on exit is');
+	getStatus(mnum);
+	return getStatus(mnum);
+}
+
+
+function refreshTable(response) {
+  console.log("%crefreshTable called","color:blue; font-weight:bold; ");
+	document.getElementById("mainInstructions").innerHTML = 'fred registered';
+	makeTable(response);
+}
+
+function nextReg(response) {
+  console.log("%cnextReg called","color:blue; font-weight:bold; ");
+	console.log(response);
+	document.getElementById("mainInstructions").innerHTML = response.status;
+  document.getElementById("mainInstructions").style.color = "#63c369";
+  filterText = document.getElementById("showMemberMatches").value;
+  console.log("filtertext = " + filterText);
+	document.getElementById("showMemberMatches").value = "";
+  document.getElementById("copiedText").value = "";
+	numAttendees = response.numAttendees;
+	document.getElementById("eventRegisterFor").innerHTML = selectedEventDetails + ", " + numAttendees + " in person";
+  // 
+	filterMemberTable();
+}
+
+function input(e){
+  doInput(e);
+  copyInput(e);
+
+}
+
+function doInput(e) {
+  console.log("do input: " + e);
+	var tbInput = document.getElementById("showMemberMatches");
+	tbInput.value = tbInput.value + e.value;
+  console.log(tbInput.value);
+	filterMemberTable();
+}
+function copyInput(e) { 
+  console.log("copy input: " + e);
+	var tbInput = document.getElementById("copiedText");
+	tbInput.value = tbInput.value + e.value;
+  console.log(tbInput.value);
+}
+
+
+function del() {
+  doDel();
+  copyDel();
+}
+
+
+function doDel() {
+	var tbInput = document.getElementById("showMemberMatches");
+	tbInput.value = tbInput.value.substr(0, tbInput.value.length - 1);
+	filterMemberTable();
+}
+function copyDel() {
+	var tbInput = document.getElementById("copiedText");
+	tbInput.value = tbInput.value.substr(0, tbInput.value.length - 1);
+}
+
+function showSessionId() {
+  console.log("%cshowSessionId called","color:blue; font-weight:bold; ");
+	document.getElementById("storedSessionId1").innerHTML = 'stored sessionId = ' + sessionStorage.sessionId;
+	document.getElementById("storedSessionId2").innerHTML = 'stored sessionId = ' + sessionStorage.sessionId;
+}
+
+function resetSessionId() {
+  console.log("%cresetSessionId called","color:blue; font-weight:bold; ");
+	sessionStorage.sessionId = null;
+	showSessionId;
+}
+
+
+function updateTable() {
+  if(isSessionStorageKey("selectedEventDetails")){
+	console.log("%cupdate table called, selected event details = " +  selectedEventDetails,"color:blue; font-weight:bold; ");
+  document.getElementById("eventRegisterFor").innerHTML = "Getting data from server";
+	sessionId = sessionStorage.sessionId;
+	var eventCode = selectedEventDetails.toString().slice(0,7);
+	var data = [sessionId, eventCode];
+	console.log("data sent is");
+	console.log(data);
+	google.script.run.withSuccessHandler(makeTable).getRegisteredMembersData(JSON.stringify(data));
+	document.getElementById("mainInstructions").innerHTML = "Getting the register from the server"
+  } else {
+    document.getElementById("mainInstructions").innerHTML = "No event specified, please select an event"
+  }
+}
+
+function makeTable(response) {
+  console.log("%cmakeTable called","color:blue; font-weight:bold; ");
+
+	document.getElementById("mainInstructions").innerHTML = "Register loaded / synchronised";
+
+  var d = new Date();
+
+	console.log('MAKETABLE ' + d.getTime());
+
+  if(response.msg == 'There are no new members to add'){
+    console.log('There are no new members to add, exiting');
+    document.getElementById("mainInstructions").innerHTML = "There are no new members to add";
+    return
+  }
+	console.log(response);
+  if( response.sessionIdOk == "validSessionId"){
+      regData = [];
+      numAttendees = 0;
+      // response is a json
+      //  response.eventCode is the eventCode
+      // response.membersTable is the table for this event
+      // the fields in this table (data) are
+      // mnum = data[index][0];
+      // memberTitle = data[index][1];
+      // memberForename = data[index][3];
+      // memberSurname = data[index][4];
+      // registered = data[index][5] - value = true / false
+      // checked = data[index][6] - value = true / false
+      var regLink, checkLink, doReg, xReg, part2, iconColour, thisUrl, thisReg = {},
+        mnum, rowId, regButtonId, checkButtonId, regIconId, checkIconId, zoomLink, zoomIconId, zoomButtonId;
+      //  var response = JSON.parse(responseJson);
+      var sessionIdOk = response.sessionIdOk;
+      var eventCode = response.eventCode;
+      data = response.memberRegister;
+      var membersTable = `<table id="membersTable" style="font-size: 1.5vw;">
+                                <thead>
+                                  <tr class = "tableHeader" style = "background: #eee;">
+                                    <th>MNUM</th>
+                                    <th style = "width:13em;">Name</th>
+                                    <th style = "width:5em; text-align: center;">Register</th>
+                                    <th style = "width:5em; text-align: center;">Check</th>
+                                    <th style = "width:5em; text-align: center;">Zoom</th>
+                                  </tr>
+                                </thead><tbody id = "memberTableBody">`;
+      for (var index = 0; index < data.length; index++) {
+        rowId = "row_" + index.toString().padStart(4, "0");
+        regButtonId = "reg_btn_" + index.toString().padStart(4, "0");
+        checkButtonId = "check_btn_" + index.toString().padStart(4, "0");
+        zoomButtonId = "zoom_btn_" + index.toString().padStart(4, "0");
+        regIconId = "reg_" + index.toString().padStart(4, "0");
+        checkIconId = "check_" + index.toString().padStart(4, "0");
+        zoomIconId = "zoom_" + index.toString().padStart(4, "0");
+        thisReg.eventCode = eventCode;
+        thisReg.mnum = data[index][0];
+        thisReg.memberTitle = data[index][1];
+        thisReg.memberForename = data[index][3];
+        thisReg.memberSurname = data[index][4];
+        thisReg.memberRegistered = data[index][5];
+        thisReg.memberChecked = data[index][6];
+        thisReg.memberZoomed = data[index][7];
+        thisReg.rowId = rowId;
+        thisReg.regButtonId = regButtonId;
+        thisReg.checkButtonId = checkButtonId;
+        thisReg.zoomButtonId = zoomButtonId;
+        thisReg.regIconId = regIconId;
+        thisReg.checkIconId = checkIconId;
+        thisReg.zoomIconId = zoomIconId;
+        if (thisReg.memberRegistered) {
+          numAttendees++;
+        }
+
+        regData.push([data[index][0].toString(), data[index][5], data[index][6], data[index][7]]);
+        mnum = data[index][0].toString().padStart(3, "0");
+        if (mnum.length > 4) {
+          mnum = mnum.slice(0, 4) + '-';
+        }
+        if (data[index][5]) {
+          thisReg.action = 'deregister';
+          regLink = `<regButton id= "${regButtonId}" 
+                          class= "saveButton" 
+                          onclick=manageMemberFor(${JSON.stringify(thisReg)})>
+                          <i class="material-icons md-40" id = "${regIconId}" style="width:100%; height:auto; margin-left: auto; margin-right: auto; color:red; font-weight: bold; ">how_to_reg</i></button>`;
+        } else {
+          thisReg.action = 'register';
+          regLink = `<regButton id= "${regButtonId}" 
+                          class= "saveButton" 
+                          onclick=manageMemberFor(${JSON.stringify(thisReg)})>
+                          <i class="material-icons md-40" id = "${regIconId}" style="width:100%; height:auto; margin-left: auto; margin-right: auto;color:#a6a6a6;">psychology_alt</i></button>`;
+        }
+        if (data[index][6]) {
+          thisReg.action = 'uncheck';
+          checkLink = `<checkButton id= "${checkButtonId}" 
+                          class= "saveButton" 
+                          onclick= manageMemberFor(${JSON.stringify(thisReg)})>
+                          <i class="material-icons md-40" id = "${checkIconId}" style="width:100%; height:auto; margin-left: auto; margin-right: auto; color:red;">how_to_reg</i></button>`;
+        } else {
+          thisReg.action = 'check';
+          checkLink = `<checkButton id= "${checkButtonId}" 
+                          class= "saveButton" 
+                          onclick=manageMemberFor(${JSON.stringify(thisReg)})>
+                          <i class="material-icons md-40" id = "${checkIconId}" style="width:100%; height:auto; margin-left: auto; margin-right: auto; color:#a6a6a6;">psychology_alt</i></button>`;
+        }
+        if (data[index][7]) {
+          thisReg.action = 'dezoom';
+          zoomLink = `<zoomButton id= "${zoomButtonId}" 
+                          class= "saveButton" 
+                          onclick= manageMemberFor(${JSON.stringify(thisReg)})>
+                          <i class="material-icons md-40" id = "${zoomIconId}" style="width:100%; height:auto; margin-left: auto; margin-right: auto; color:red;">videocam</i></button>`;
+        } else {
+          thisReg.action = 'zoom';
+          zoomLink = `<zoomButton id= "${zoomButtonId}" 
+                          class= "saveButton" 
+                          onclick=manageMemberFor(${JSON.stringify(thisReg)})>
+                          <i class="material-icons md-40" id = "${zoomIconId}" style="width:100%; height:auto; margin-left: auto; margin-right: auto; color:#a6a6a6;">psychology_alt</i></button>`;
+        }
+        if (index == 0) {
+          membersTable = membersTable + `<tr id = "${rowId}" style = "color:black;">
+                                                      <td>${mnum}</td>
+                                                      <td id = "firstName">${data[index][1]} ${data[index][3]} ${data[index][4]}</td>
+                                                      <td style = "width:5em; text-align: center;">${regLink}</td>
+                                                      <td style = "width:5em; text-align: center;">${checkLink}</td>
+                                                      <td style = "width:5em; text-align: center;">${zoomLink}</td>
+                                                      </tr>`;
+        } else {
+          membersTable = membersTable + `<tr id = "${rowId}" style = "color:black;">
+                                                      <td>${mnum}</td>
+                                                      <td>${data[index][1]} ${data[index][3]} ${data[index][4]}</td>
+                                                      <td style = "width:5em; text-align: center;">${regLink}</td>
+                                                      <td style = "width:5em; text-align: center;">${checkLink}</td>
+                                                      <td style = "width:5em; text-align: center;">${zoomLink}</td>
+                                                      </tr>`;
+
+        }
+      }
+      membersTable = membersTable + '</row></tbody>';
+      //console.log(membersTable);
+      //console.log(regData);
+      fillMemberTable(membersTable);
+      document.getElementById("eventRegisterFor").innerHTML = selectedEventDetails + ", " + numAttendees + " in person";
+  } else if( response.sessionIdOk == "null event code"){
+    console.log("invalid response " + response.sessionIdOk);
+    document.getElementById("mainInstructions").innerHTML = "No event selected, please select an event";
+  } else {
+    console.log("invalid response " + response.sessionIdOk);
+    resetSession();
+    
+  }
+}
+
+// listen for changes in event selected
+document.getElementById("eventsList").addEventListener('change', (e) => {
+	selectedEventDetails = document.getElementById("eventsList").value;
+  sessionStorage.selectedEventDetails = selectedEventDetails;
+	console.log("line 1294, event listener calling set event, event set as " + selectedEventDetails);
+	updateTable();
+});
+
+// listen for changes in orientation or screen split, or key size 
+
+// listen for change in orientation
+
+let portrait = window.matchMedia("(orientation: portrait)");
+
+portrait.addEventListener("change", function(e) {
+	var screenWidth = window.innerWidth;
+	var screenHeight = window.innerHeight;
+	if (e.matches) {
+		// Portrait mode
+		console.log("portrait mode");
+		// document.getElementById("mainInstructions").innerHTML = "portrait " + window.innerWidth + ' by ' + window.innerHeight;
+		setScreenSplitAndKeySize();
+	} else {
+		// Landscape
+		console.log("landscape mode");
+		// document.getElementById("mainInstructions").innerHTML = "landscape " + window.innerWidth + ' by ' + window.innerHeight;
+		setScreenSplitAndKeySize();
+	}
+})
+
+// listen for changes in screen split
+
+document.getElementById('newSplit').addEventListener('change', (e) => {
+	//console.log(hideNonAttendees)	
+	var screenWidth = window.innerWidth;
+	var screenHeight = window.innerHeight;
+	var leftSplitInt = document.getElementById("newSplit").value;
+	var leftSidePixels = parseInt(leftSplitInt) * screenWidth / 100;
+	var rightSplitInt = 100 - parseInt(leftSplitInt);
+	rightSideWidth = rightSplitInt.toString() + "%";
+	leftSideWidth = leftSplitInt + "%";
+	console.log(leftSplitInt + ' ' + typeof leftSplitInt);
+	console.log(leftSideWidth + ' ' + typeof leftSideWidth)
+	console.log(rightSplitInt + ' ' + typeof rightSplitInt);
+	console.log(rightSideWidth + ' ' + typeof rightSideWidth);
+	changeScreenSplit();
+	// document.getElementById("mainInstructions").innerHTML = screenWidth + ' by ' + screenHeight + ' split ' + leftSideWidth + ' px = ' + leftSidePixels + ' key size = ' + keySize;
+});
+
+// listen for changes in key size
+
+document.getElementById("newKeySize").addEventListener('change', (e) => {
+	var keySizeInt = parseInt(document.getElementById("newKeySize").value);
+	keySize = keySizeInt.toString();
+	var screenWidth = window.innerWidth;
+	var screenHeight = window.innerHeight;
+	// document.getElementById("mainInstructions").innerHTML = screenWidth + ' by ' + screenHeight + ' split ' + leftSideWidth + ' px = ' + ' key size = ' + keySize;
+	changekeySize();
+});
+
+function changekeySize() {
+  console.log("%cchangekeySizer called","color:blue; font-weight:bold;"); 
+
+	var keys = document.getElementsByClassName('keyboard_button');
+	var textSize = parseInt(keySize) / 2 + "px";
+	var thisKeySize = keySize + "px";
+	console.log(textSize + " / " + thisKeySize)
+	for (i = 0; i < keys.length; i++) {
+		keys[i].style.width = thisKeySize;
+		keys[i].style.height = thisKeySize;
+		keys[i].style.fontSize = textSize;
+	}
+
+	// change the spacebar size
+
+	document.getElementById("spacebar").style.height = thisKeySize;
+	document.getElementById("spacebar").style.width = 6.5 * keySize + "px";
+  document.getElementById("spacebar").style.fontSize = textSize;
+
+	// change the backspace key size
+	document.getElementById("backbtn").style.height = thisKeySize;
+	document.getElementById("backbtn").style.width = thisKeySize;
+  document.getElementById("backbtn").style.fontSize = textSize;
+
+    //change the search box copy width 
+   var searchBarWidth = 10 * keySize + "px"; 
+   document.getElementById("copiedText").style.width = searchBarWidth;
+  
+  var screenWidth = window.innerWidth;
+	var screenHeight = window.innerHeight;
+
+  console.log("landscape orientation");
+  localStorage.landscapeKeySize = keySize;
+
+}
+
+
+function addGuest() {
+	console.log("%cadding guest","color:blue; font-weight:bold; ");
+	if (!showAddGuest) {
+		showAddGuest = true;
+		document.getElementById("addGuestSection").style.display = "block";
+
+	} else {
+		showAddGuest = false;
+		document.getElementById("addGuestSection").style.display = "none";
+	}
+}
+
+function registerGuest() {
+	console.log("%cregister guest called","color:blue; font-weight:bold; ");
+
+	var guestTitle = document.getElementById("guestTitle").value;
+	var guestForename = document.getElementById("guestForename").value
+	var guestSurname = document.getElementById("guestSurname").value
+	var guestPhone = document.getElementById("guestPhone").value;
+
+	if (guestTitle.length > 0 && guestForename.length > 0 && guestSurname.length > 0 && guestPhone.length > 0) {
+		console.log("registering guest");
+		google.script.run.withSuccessHandler(addGuestSuccessHandler).addGuest(guestTitle, guestForename, guestSurname, guestPhone, selectedEventDetails.slice(0,7));
+
+	} else {
+		console.log("fail");
+		document.getElementById("addGuestTitle").innerHTML = "You must complete all fields";
+
+	}
+
+}
+
+function addGuestSuccessHandler(response) {
+	console.log("%caddGuestSuccessHandler received","color:red;");
+  
+	// clear fields and close add guest
+	document.getElementById("guestTitle").value = "";
+	document.getElementById("guestForename").value = "";
+	document.getElementById("guestSurname").value = "";
+	document.getElementById("guestPhone").value = "";
+	addGuest();
+
+	console.log(response);
+	var rowNumber = response.rowId.toString().padStart(4, "0")
+	var thisReg = {};
+	thisReg.eventCode = response.eventCode;
+	thisReg.mnum = response.mnum;
+	thisReg.memberTitle = response.title;
+	thisReg.memberForename = response.forename;
+	thisReg.memberSurname = response.surname + ' - ' + response.phone;
+	thisReg.memberRegistered = false;
+	thisReg.memberChecked = false;
+	thisReg.memberZoomed = false;
+	thisReg.rowId = "row_" + rowNumber;
+	thisReg.regButtonId = "reg_btn_" + rowNumber;
+	thisReg.checkButtonId = "check_btn_" + rowNumber;
+	thisReg.zoomButtonId = "zoom_btn_" + rowNumber;
+	thisReg.regIconId = "reg_" + rowNumber;
+	thisReg.checkIconId = "check_" + rowNumber;
+	thisReg.zoomIconId = "zoom_" + rowNumber;
+	// add this new member to the regData table
+	regData.push([response.mnum.toString(), true, false, false]);
+	// add another row to the table
+	newRow = `<tr id="row_${rowNumber}" style="color:black;">
+                    <td>${thisReg.mnum}</td>
+                    <td>${thisReg.memberTitle} ${thisReg.memberForename} ${thisReg.memberSurname}</td>
+                    <td style="width:5em; text-align: center;">
+                      <regbutton id="reg_btn_${rowNumber}" class="saveButton" 
+                  onclick="registerMemberFor({&quot;eventCode&quot;:&quot;${thisReg.eventCode}&quot;,&quot;mnum&quot;:${thisReg.mnum},&quot;memberTitle&quot;:&quot;dd&quot;,&quot;memberForename&quot;:&quot;gg&quot;,&quot;memberSurname&quot;:&quot;hh&quot;,&quot;memberRegistered&quot;:true,&quot;memberChecked&quot;:false,&quot;memberZoomed&quot;:false,&quot;rowId&quot;:&quot;row_${rowNumber}&quot;,&quot;regButtonId&quot;:&quot;reg_btn_${rowNumber}&quot;,&quot;checkButtonId&quot;:&quot;check_btn_${rowNumber}&quot;,&quot;zoomButtonId&quot;:&quot;zoom_btn_${rowNumber}&quot;,&quot;regIconId&quot;:&quot;reg_${rowNumber}&quot;,&quot;checkIconId&quot;:&quot;check_${rowNumber}&quot;,&quot;zoomIconId&quot;:&quot;zoom_${rowNumber}&quot;})"> 
+                  <i class="material-icons md-40" id="reg_${rowNumber}" style="width:100%; height:auto; margin-left: auto; margin-right: auto;color:red;">how_to_reg</i></regbutton>
+                    </td>
+                    <td style="width:5em; text-align: center;">
+                      <checkbutton id="check_btn_${rowNumber}" class="saveButton" 
+                  onclick="checkMemberFor({&quot;eventCode&quot;:&quot;${thisReg.eventCode}&quot;,&quot;mnum&quot;:${thisReg.mnum},&quot;memberTitle&quot;:&quot;dd&quot;,&quot;memberForename&quot;:&quot;gg&quot;,&quot;memberSurname&quot;:&quot;hh&quot;,&quot;memberRegistered&quot;:false,&quot;memberChecked&quot;:false,&quot;memberZoomed&quot;:false,&quot;rowId&quot;:&quot;row_${rowNumber}&quot;,&quot;regButtonId&quot;:&quot;reg_btn_${rowNumber}&quot;,&quot;checkButtonId&quot;:&quot;check_btn_${rowNumber}&quot;,&quot;zoomButtonId&quot;:&quot;zoom_btn_${rowNumber}&quot;,&quot;regIconId&quot;:&quot;reg_${rowNumber}&quot;,&quot;checkIconId&quot;:&quot;check_${rowNumber}&quot;,&quot;zoomIconId&quot;:&quot;zoom_${rowNumber}&quot;})">
+                  <i class="material-icons md-40" id="check_${rowNumber}" style="width:100%; height:auto; margin-left: auto; margin-right: auto; color:#a6a6a6;">psychology_alt</i></checkbutton>
+                    </td>
+                    <td style="width:5em; text-align: center;">
+                      <zoombutton id="zoom_btn_${rowNumber}" class="saveButton" 
+                  onclick="zoomMemberFor({&quot;eventCode&quot;:&quot;${thisReg.eventCode}&quot;,&quot;mnum&quot;:${thisReg.mnum},&quot;memberTitle&quot;:&quot;dd&quot;,&quot;memberForename&quot;:&quot;gg&quot;,&quot;memberSurname&quot;:&quot;hh&quot;,&quot;memberRegistered&quot;:false,&quot;memberChecked&quot;:false,&quot;memberZoomed&quot;:false,&quot;rowId&quot;:&quot;row_${rowNumber}&quot;,&quot;regButtonId&quot;:&quot;reg_btn_${rowNumber}&quot;,&quot;checkButtonId&quot;:&quot;check_btn_${rowNumber}&quot;,&quot;zoomButtonId&quot;:&quot;zoom_btn_${rowNumber}&quot;,&quot;regIconId&quot;:&quot;reg_${rowNumber}&quot;,&quot;checkIconId&quot;:&quot;check_${rowNumber}&quot;,&quot;zoomIconId&quot;:&quot;zoom_${rowNumber}&quot;})">
+                  <i class="material-icons md-40" id="zoom_${rowNumber}" style="width:100%; height:auto; margin-left: auto; margin-right: auto; color:#a6a6a6;">psychology_alt</i></zoombutton>
+                    </td>
+                  </tr>`;
+
+
+
+	document.getElementById("memberTableBody").innerHTML = document.getElementById("memberTableBody").innerHTML + newRow;
+  console.log(`"row_${rowNumber}"`)
+  
+  //const element = document.getElementById("row_0367");
+  const element = document.getElementById(`row_${rowNumber}`);
+  element.scrollIntoView();
+
+	//registerMemberFor(thisReg);
+}
+
+
+
+function getTodayDateString() {
+  console.log("%cgetTodayDateString() called","color:blue; font-weight:bold; ");
+	var d = new Date();
+	var today = `${d.getDate().toString().padStart(2,"0")}/${(d.getMonth()+1).toString().padStart(2,"0")}/${d.getFullYear()}`;
+  // today = "30/03/2023"
+	console.log(today)
+	return today
+}
+
+function showTuningControls() {
+	console.log("%c showing tuning controls","color:blue; font-weight:bold; ");
+	if (!showTuningControl) {
+		showTuningControl = true;
+		document.getElementById("screenAdjustment").style.display = "block";
+
+	} else {
+		showTuningControl = false;
+		document.getElementById("screenAdjustment").style.display = "none";
+	}
+}
+
+function saveTuning() {
+	console.log("%csaving tuning","color:blue; font-weight:bold; ");
+  var screenWidth = window.innerWidth;
+	var screenHeight = window.innerHeight;	
+	if (screenWidth >= screenHeight) {
+		console.log("saving landscape tuning");
+		localStorage.setItem("landscapeLeftSideWidth", leftSideWidth);
+		localStorage.setItem("landscapeRightSideWidth", rightSideWidth);
+		localStorage.setItem("landscapeKeySize", keySize);
+		console.log("landscape left = " + localStorage.getItem("landscapeLeftSideWidth"));
+		console.log("landscape right = " + localStorage.getItem("landscapeRightSideWidth"));
+		console.log("landscape key size = " + localStorage.getItem("landscapeKeySize"));
+	} else {
+		console.log("saving portrait tuning");
+		localStorage.setItem("portraitLeftSideWidth", leftSideWidth);
+		localStorage.setItem("portraitRightSideWidth", rightSideWidth);
+		localStorage.setItem("portraitKeySize", keySize);
+		console.log("portrait left = " + localStorage.getItem("portraitLeftSideWidth"));
+		console.log("portrait left = " + localStorage.getItem("portraitRightSideWidth"));
+		console.log("portrait key size = " + localStorage.getItem("portraitKeySize"));
+
+	}
+}
+
+function resetTuning() {
+	console.log("%cresetting tuning","color:blue; font-weight:bold; ");
+  logTuning();
+	leftSideWidth = "50%";
+	rightSideWidth = "50%";
+	keySize = 40;
+	localStorage.setItem("landscapeLeftSideWidth", leftSideWidth);
+	localStorage.setItem("landscapeRightSideWidth", rightSideWidth);
+	localStorage.setItem("landscapeKeySize", keySize);
+	console.log(" all screen split and keyboard sizes reset to default");
+	document.getElementById("newKeySize").value = keySize;
+	document.getElementById("newSplit").value = parseInt(leftSideWidth.slice(0, 2));
+  setScreenSplitAndKeySize();
+}
+
+function changeScreenSplit() {
+  console.log("%cchangeScreenSplit() called","color:blue; font-weight:bold; ");
+	document.getElementById("leftSide").style.width = leftSideWidth;
+	document.getElementById("rightSide").style.width = rightSideWidth;  
+  
+  var screenWidth = window.innerWidth;
+	var screenHeight = window.innerHeight;
+
+    console.log("landscape orientation");
+    localStorage.landscapeLeftSideWidth = leftSideWidth;
+    localStorage.landscapeRightSideWidth = rightSideWidth;
+
+
+}
+
+
+
+function setScreenSplitAndKeySize() {
+  
+  console.log("%csetScreenSplitAndKeySize() called","color:blue; font-weight:bold; ");
+  logTuning();
+	// on load, get the local properties if they exist 
+	// if they dont, reset them
+	// then set the standard values
+
+	var screenWidth = window.innerWidth;
+	var screenHeight = window.innerHeight;
+
+  // determine the primary and secondary screen modes
+  let thisScreenMode = screen.orientation.type; 
+
+// potential values are
+  // "landscape-primary":
+  // "landscape-secondary":
+
+  // "portrait-secondary":
+  // "portrait-primary": 
+    // default the screen split and key sizes
+    let thisLeftSideWidth = "0%";
+		let thisRightSideWidth = "100%"
+    let thisKeySize = 40;
+    let thisTextSize = thisKeySize / 2;
+
+  if(thisScreenMode == "portrait-primary"){
+
+    localStorage.primaryScreenMode = "portrait";
+    localStorage.secondaryScreenMode = "landscape";
+    
+
+  } else if(thisScreenMode == "landscape-primary"){
+    localStorage.primaryScreenMode = "landscape";
+    localStorage.secondaryScreenMode = "portrait";
+    // default the screen split
+    thisLeftSideWidth = "50%";
+		thisRightSideWidth = "50%";
+
+  } else if(thisScreenMode == "portrait-secondary"){
+    localStorage.primaryScreenMode = "landscape";
+    localStorage.secondaryScreenMode = "portrait"
+
+  } else if(thisScreenMode == "landscape-secondary"){
+
+    localStorage.primaryScreenMode = "portrait";
+    localStorage.secondaryScreenMode = "landscape";
+    // default the screen split
+    thisLeftSideWidth = "50%";
+		thisRightSideWidth = "50%";
+
+  } else {
+    console.log(`unrecognised screem orientation type ${thisScreenMode}` )
+  }
+
+  // retrieve and split and key sizes saved for landscape mode
+
+
+  if (localStorage.getItem("landscapeLeftSideWidth") != null && localStorage.getItem("landscapeRightSideWidth") != null) {
+			thisLeftSideWidth = localStorage.getItem("landscapeLeftSideWidth");
+			thisRightSideWidth = localStorage.getItem("landscapeRightSideWidth");
+		} else {
+      localStorage.landscapeLeftSideWidth = thisLeftSideWidth;
+      localStorage.landscapeRightSideWidth = thisRightSideWidth;
+    }
+	
+  if (localStorage.getItem("landscapeKeySize") != null) {
+			thisKeySize = localStorage.getItem("landscapeKeySize");
+      thisTextSize = thisKeySize / 2;
+		} else {
+      localStorage.landscapeKeySize = thisKeySize;
+    }
+
+
+	// set screen split
+
+  console.log(` setting screen split ${thisLeftSideWidth} / ${thisRightSideWidth}`)
+
+	document.getElementById("leftSide").style.width = thisLeftSideWidth;
+	document.getElementById("rightSide").style.width = thisRightSideWidth;
+
+	// set keyboard size
+
+	var keys = document.getElementsByClassName('keyboard_button');
+	var textSize = thisTextSize + "px";
+	var keySize = thisKeySize + "px";
+  var searchBarWidth = 10 * thisKeySize + "px"; 
+
+	console.log(`setting key size to ${keySize}, text size to ${textSize}, search bar copy size to ${searchBarWidth }`);
+	for (var i = 0; i < keys.length; i++) {
+		keys[i].style.width = keySize;
+		keys[i].style.height = keySize;
+		keys[i].style.fontSize = textSize;
+	}
+
+	// change the spacebar size
+
+	document.getElementById("spacebar").style.height = keySize;
+	document.getElementById("spacebar").style.width = 6.5 * thisKeySize + "px";
+  document.getElementById("spacebar").style.fontSize = textSize;
+
+	// change the backspace key size
+	document.getElementById("backbtn").style.height = keySize;
+	document.getElementById("backbtn").style.width = keySize;
+  document.getElementById("backbtn").style.fontSize = textSize;
+
+  //change the search box copy width    
+   document.getElementById("copiedText").style.width = searchBarWidth;
+
+
+}
+
+function logTuning(){
+  console.log(`portrait split: ${localStorage.getItem("portraitLeftSideWidth")} / ${localStorage.getItem("portraitRightSideWidth")}, key size: ${localStorage.getItem("portraitKeySize")}`);
+  console.log(`landscape split: ${localStorage.getItem("landscapeLeftSideWidth")} / ${localStorage.getItem("landscapeRightSideWidth")}, key size: ${localStorage.getItem("landscapeKeySize")}`);
+
+}
+
+function displayTuning(){
+    document.getElementById("mainInstructions").innerHTML  = localStorage.openWithTodaysEvent;
+
+}
+
+
+function toggleOpenMode(){
+  console.log("openWithTodaysEvent = " + localStorage.openWithTodaysEvent);
+   //clear any existing event name and table
+    document.getElementById("membersTable").style = "display:none;";
+    document.getElementById("eventRegisterFor").innerHTML = "";
+    selectedEventDetails = "";
+    sessionStorage.removeItem("selectedEventDetails");
+    
+  if(localStorage.openWithTodaysEvent == "allEvents"){
+    setToggleToTodaysEvents(); 
+  } else {
+    setToggleToAllEvents();
+    selectedEventDetails = "";
+  }
+
+}
+
+function setToggleToTodaysEvents(){
+  console.log("setting local storage to todaysEvents");
+  localStorage.openWithTodaysEvent = "todaysEvents";
+  console.log("setting icon to today")
+  document.getElementById("showTodayIcon").innerHTML = "calendar_month";
+  console.log("Defaulted changed to showing , only todays event on open, WithTodaysEvent = " + localStorage.openWithTodaysEvent);
+  showTodaysEvents();
+}
+
+function setToggleToAllEvents(){
+  console.log("setting local storage to allEvents");
+  localStorage.openWithTodaysEvent = "allEvents";
+  console.log("setting icon to calendar_month")
+  document.getElementById("showTodayIcon").innerHTML = "today";
+  console.log("Defaulted changed to showing all events on open, openWithTodaysEvent = " + localStorage.openWithTodaysEvent+ " /" + selectedEventDetails) +"/";
+  showAllEvents();
+}
+
+function getSessionStorageKeys(){
+  var keys = [];
+  for(var i = 0 ; i < sessionStorage.length; i++){
+    keys.push(sessionStorage.key(i));
+  }
+  console.log(keys.length + " session keys = " + keys);
+   if(keys.length == 0){
+    console.log("there are no session keys");
+  } else {
+      for(var j = 0 ; j < keys.length; j++){
+      console.log(`${keys[j]}:${sessionStorage.getItem(keys[j])}`);
+      }
+  }
+  return keys;
+}
+
+function isSessionStorageKey(value){
+  var ssKeys = getSessionStorageKeys;
+  if(ssKeys().toString().indexOf(value) > -1  && sessionStorage.getItem(value)!= null){
+    return true;
+  } else{
+    return false;
+  }
+
+}
+
+function getLocalStorageKeys(){
+  var keys = [];
+  for(var i = 0 ; i < localStorage.length; i++){
+    keys.push(localStorage.key(i));
+  }
+  //console.log("keys");
+  //console.log(keys);
+  return keys;
+}
+
+function isLocalStorageKey(value){
+  var lsKeys = getLocalStorageKeys;
+  if(lsKeys().toString().indexOf(value) > -1){
+    return true;
+  } else {
+    return false;
+  }
+
+}
+  function extractEventsListToSessionStorage(){
+    console.log("%cextractEventsListToSessionStorage called", "color:blue; font-weight:bold; ")
+    
+      // form the eventsList from the select data and save in local storage
+
+      var eventSelectOptions = document.getElementsByClassName("eventSelectOption");
+      // console.log(document.getElementById("eventsList").innerHTML);
+      eventsList = [];   
+      // console.log("event select options. length = " + eventSelectOptions.length);
+        for (var i = 0; i < eventSelectOptions.length; i++) {
+          // console.log(eventSelectOptions[i].innerHTML);
+          eventsList.push([eventSelectOptions[i].innerHTML]);
+        }
+      sessionStorage.eventsList = JSON.stringify(eventsList);  
+      console.log("events list extracted from selecthtml")    
+      //console.log(eventsList);
+  }   
+
+  function extractTodaysEventListToSessionStorage(){
+    console.log("%cextractTodaysEventListToSessionStorage called", "color:blue; font-weight:bold; ")
+
+      // form todays events list
+
+      var d = getTodayDateString();
+      //var d = "30/03/2023";
+			todaysEventsList = eventsList.map(value => {
+              if (value.toString().slice(9, 19) == d) {
+                return value;
+              };
+            }).filter(value => value != null);
+
+    sessionStorage.todaysEventsList = JSON.stringify(todaysEventsList);
+    console.log("todays events list extracted from selecthtml") 
+		
+    console.log(todaysEventsList);
+    }
+
+    function retrieveScreenSplit_KeySize_FromLocalStorage(){
+      console.log("%cretrieveScreenSplit_KeySize_FromLocalStorage called", "color:blue; font-weight:bold; ");
+          // var displaySettings = [["landscapeLeftSideWidth","50%"], ["landscapeRightSideWidth","50%"], ["landscapeKeySize",40],["portraitLeftSideWidth","50%"],["portraitRightSideWidth","50%"],["portraitKeySize",40]];
+
+
+
+
+
+      // if(!isLocalStorageKey("landscapeLeftSideWidth")){
+      //   localStorage.setItem("landscapeLeftSideWidth","50%");
+      //   landscapeLeftSideWidth = "50%";
+      //   console.log( "landscapeLeftSideWidth" +  " defaulted to " + landscapeLeftSideWidth);
+      // } else {
+      //   landscapeLeftSideWidth = localStorage.landscapeLeftSideWidth;
+      //   console.log("landscapeLeftSideWidth retrieved from local storage: " + landscapeLeftSideWidth);
+      // }
+
+      // if(!isLocalStorageKey("landscapeRightSideWidth")){
+      //   localStorage.setItem("landscapeRightSideWidth","50%");
+      //   landscapeLeftSideWidth = "50%";
+      //   console.log( "landscapeRightSideWidth" +  " defaulted to " + landscapeRightSideWidth);
+      // } else {
+      //   landscapeRightSideWidth = localStorage.landscapeRightSideWidth;
+      //   console.log("landscapeRightSideWidth retrieved from local storage: " + landscapeRightSideWidth);
+      // }
+
+      // if(!isLocalStorageKey("landscapeKeySize")){
+      //   localStorage.setItem("landscapeKeySize",40);
+      //   landscapeKeySize = "40";
+      //   console.log( "landscapeKeySize" +  " defaulted to " + landscapeKeySize);
+      // } else {
+      //   landscapeKeySize = localStorage.landscapeKeySize;
+      //   console.log("landscapeKeySize retrieved from local storage: " + landscapeKeySize);
+      // }
+      
+      // if(!isLocalStorageKey("portraitLeftSideWidth")){
+      //   localStorage.setItem("portraitLeftSideWidth","50%");
+      //   portraitLeftSideWidth = "50%";
+      //   console.log( "portraitLeftSideWidth" +  " defaulted to " + portraitLeftSideWidth);
+      // } else {
+      //   portraitLeftSideWidth = localStorage.portraitLeftSideWidth;
+      //   console.log("portraitLeftSideWidth retrieved from local storage: " + portraitLeftSideWidth);
+      // }
+
+      // if(!isLocalStorageKey("portraitRightSideWidth")){
+      //   localStorage.setItem("portraitRightSideWidth","50%");
+      //   portraitLeftSideWidth = "50%";
+      //   console.log( "portraitRightSideWidth" +  " defaulted to " + portraitRightSideWidth);
+      // } else {
+      //   portraitRightSideWidth = localStorage.portraitRightSideWidth;
+      //   console.log("portraitRightSideWidth retrieved from local storage: " + portraitRightSideWidth);
+      // }
+
+      // if(!isLocalStorageKey("portraitKeySize")){
+      //   localStorage.setItem("portraitKeySize",40);
+      //   portraitKeySize = "40";
+      //   console.log( "portraitKeySize" +  " defaulted to " + portraitKeySize);
+      // } else {
+      //   portraitKeySize = localStorage.portraitKeySize;
+      //   console.log("portraitKeySize retrieved from local storage: " + portraitKeySize);
+      // }
+
+
+
+     }
+
+
+    function retrieveOpenWithTodaysEvent_FromLocalStorage_updateSettings(){
+      console.log("%cretrieveOpenWithTodaysEvent_FromLocalStorage_updateSettings called", "color:blue; font-weight:bold; ");
+
+    // check localStorage.openWithTodaysEvent is set to an allowed value and if not set to "todaysEvents"
+    // then set the select drop down to the right set of events, its value to the right event and toggleOpenMode to the right icon and setting
+
+      if(!isLocalStorageKey("openWithTodaysEvent")){
+        console.log("localStorage.openWithTodaysEvent is not set; setting it to todaysEvents");
+        localStorage.openWithTodaysEvent = "todaysEvents";
+        ////////////////////////////////////
+      } else if(localStorage.openWithTodaysEvent !=  "todaysEvents" && localStorage.openWithTodaysEvent !=  "allEvents"){
+        console.log("localStorage.openWithTodaysEvent set to an invalid value: " + localStorage.openWithTodaysEvent + ", resetting it to todaysEvents" )
+          localStorage.openWithTodaysEvent = "todaysEvents";
+      } else {
+        console.log("localStorage.openWithTodaysEvent is set to a valid value: " + localStorage.openWithTodaysEvent);
+      };
+
+    }
+
+    function retrieveSelectedEventDetails_FromSessionStorage(){
+       console.log("%cretrieveSelectedEventDetails_FromSessionStorage called", "color:blue; font-weight:bold; ");
+
+        if (!isSessionStorageKey("selectedEventDetails")){
+          console.log("selectedEventDetails is undefined");
+          selectedEventDetails = null;
+        } else {
+          console.log("selectedEventDetails = " + selectedEventDetails);
+          selectedEventDetails = sessionStorage.selectedEventDetails
+        }
+
+    }
+
+    function retrieveEventsListFromSessionStorage(){
+      console.log("%cretrieveEventsListFromSessionStorage called", "color:blue; font-weight:bold; ")
+          if(isSessionStorageKey("eventsList")){
+            eventsList = JSON.parse(sessionStorage.eventsList);
+            console.log("retrieveEventsListToSessionStorage has set the eventsList to:");
+            console.log("??????????????????????????????????????????retrieveEventsListToSessionStorage type of eventsList = :" + typeof eventsList);
+            console.log(eventsList);
+            var eventsListHtml = '<option value="" disabled selected hidden>Select an event</option>';;
+            for (var i = 0; i < eventsList.length; i++) {
+              eventsListHtml = eventsListHtml + `<option value="${eventsList[i].toString().slice(0,19)}">${eventsList[i]}</option>`;  
+            }
+            sessionStorage.eventsListHtml = eventsListHtml;
+          } else {
+            eventsList = [];
+            console.log("retrieveEventsListToSessionStorage has set the eventsList to []");
+            sessionStorage.eventsListHtml = '<option value="" disabled selected hidden>No events</option>';
+          }
+    }
+      
+    function retrieveTodaysEventListFromSessionStorage(){
+      console.log("%cretrieveTodaysEventListFromSessionStorage called", "color:blue; font-weight:bold; ")
+        if(isSessionStorageKey("todaysEventsList")){
+          todaysEventsList = JSON.parse(sessionStorage.todaysEventsList);
+          console.log("retrieveTodaysEventListFromSessionStorage has set todaysEventsList to:");
+          console.log(todaysEventsList);
+            var eventsListHtml = '<option value="" disabled selected hidden>Select an event</option>';;
+        for (var i = 0; i < todaysEventsList.length; i++) {
+          eventsListHtml = eventsListHtml + `<option value="${todaysEventsList[i].toString().slice(0,19)}">${todaysEventsList[i]}</option>`;  
+        }
+        sessionStorage.todaysEventsListHtml = eventsListHtml;
+        } else {
+          todaysEventsList = [];
+          console.log("retrieveTodaysEventListFromSessionStorage has set todaysEventsList to []");
+          sessionStorage.todaysEventsListHtml = '<option value="" disabled selected hidden>No events</option>';
+        }
+
+    } 
+
+    function emailReg(){
+      console.log("%cemailReg called for " + sessionStorage.selectedEventDetails, "color:blue; font-weight:bold; ");
+      if(isSessionStorageKey("selectedEventDetails")){
+      google.script.run.withSuccessHandler(responseHandlerEmailReg).emailRegisterFor(sessionStorage.selectedEventDetails);
+      document.getElementById("mainInstructions").innerHTML = `<span style = "color:black; font-size:1em;">Request sent to email register to committee members - please be patient and do not refesh the screen or click anything until you receive a response</span>`;
+      } else {
+      document.getElementById("mainInstructions").innerHTML = `<span style = "color:black; font-size:1em;">No event selected, please select an event and try again</span>`; 
+      }
+    }
+
+    function responseHandlerEmailReg(response){
+      console.log("%cresponseHandlerEmailReg called with response received =  " + response, "color:red; font-weight:bold; ");
+      document.getElementById("mainInstructions").innerHTML = `<span style = "color:black; font-size:1em;">${response}</span>`;
+
+    }
+
+    function resetSession(){
+      document.getElementById("mainInstructions").innerHTML = "resetting session";
+      console.log('session storage id  does not exists,continuing to logon ');
+      document.getElementById("loginSection").style = "displayblock;";
+      document.getElementById("mainSection").style = "display:none;";
+      document.getElementById("loginInstructions").innerHTML = "Invalid session, only one session allowed at one time, switch to other session or login again ";
+    }
+
+    // mouseover text for downloading table from server
+
+        document.getElementById("refreshBtn").addEventListener('mouseenter', (e) => {
+        console.log('refreshBtnt tooltip called enter');
+        showMouseover("Get master from server");        
+        });
+        
+        document.getElementById("refreshBtn").addEventListener('mouseleave', (e) => {
+        console.log('refreshBtn tooltip called exit')
+        hideMouseover()
+        });
+    
+    // mouseover text for filtering registered members
+
+        document.getElementById("toggleShowMembers").addEventListener('mouseenter', (e) => {
+        console.log('toggleShowMembers tooltip called enter');
+            if(document.getElementById("toggleShowMembersIcon").innerHTML == "expand_less"){
+            showMouseover("Hide non registered members");
+            } else {
+              showMouseover("Unhide non registered members");
+            }          
+        });
+        
+        document.getElementById("toggleShowMembers").addEventListener('mouseleave', (e) => {
+        console.log('toggleShowMembers tooltip called exit')
+        hideMouseover();
+        });
+ 
+
+    // mouseover text for adding guest
+
+        document.getElementById("addGuest").addEventListener('mouseenter', (e) => {
+        console.log('addGuest tooltip called enter');
+        showMouseover("Register a non member");        
+        });
+        
+        
+        document.getElementById("addGuest").addEventListener('mouseleave', (e) => {
+        console.log('addGuest tooltip called exit');
+        hideMouseover();
+        });
+    
+
+    // mouseover text for  sending email of register to committee members
+
+        document.getElementById("emailReg").addEventListener('mouseenter', (e) => {
+        console.log('emailReg tooltip called enter');
+        showMouseover("Email register to designated committee members");
+        
+        });
+        
+        document.getElementById("emailReg").addEventListener('mouseleave', (e) => {
+        console.log('emailReg tooltip called exit')
+        hideMouseover()
+        });
+
+
+    // mouseover text for refreshing members in events list
+
+        document.getElementById("showUpdateOptionsBtn").addEventListener('mouseenter', (e) => {
+        console.log('refreshMembers tooltip called enter');
+        showMouseover("Show options for updating the register");
+        
+        });
+        
+        document.getElementById("showUpdateOptionsBtn").addEventListener('mouseleave', (e) => {
+        console.log('refreshMembers tooltip called exit')
+        hideMouseover()
+        });
+
+           
+    // mouseover show just todays event or all events
+
+        document.getElementById("showTodayBtn").addEventListener('mouseenter', (e) => {
+        console.log('showTodayBtn tooltip called enter');
+          if(document.getElementById("showTodayIcon").innerHTML == "today"){
+          showMouseover("Change default to showing todays event only");
+          } else {
+            showMouseover("Change default to showing all events");
+          }
+          
+        });
+        
+        document.getElementById("showTodayBtn").addEventListener('mouseleave', (e) => {
+        console.log('showTodayBtn tooltip called exit')
+        hideMouseover()
+        });
+
+      function showMouseover(message){
+        
+          currentMessage = document.getElementById("mainInstructions").innerHTML;
+          currentMessageColour = document.getElementById("mainInstructions").style.color;
+          console.log(currentMessageColour);
+          document.getElementById("mainInstructions").innerHTML = message;
+          document.getElementById("mainInstructions").style.color = "#A9A9A9";
+          document.getElementById("mainInstructions").style.fontSize = "1.5vw";
+
+      }
+
+      function hideMouseover(){
+          document.getElementById("mainInstructions").innerHTML = currentMessage;
+          document.getElementById("mainInstructions").style.color = currentMessageColour;
+          document.getElementById("mainInstructions").style.fontSize = "1.2vw";
+      }
+
+      function savedSearch(){
+        console.log("%csaved search called, filterText = " + filterText, "color:red; font-weight:bold; ");
+        if(typeof(filterText) !== "undefined"){
+        document.getElementById("showMemberMatches").value = filterText;
+        document.getElementById("copiedText").value = filterText;
+        filterMemberTable();
+        } else {
+          console.log("no filter applied");
+        }
+      }
+
+
+
+      function clearSearch(){
+        console.log("%cclear search called, filterText = " + filterText, "color:red; font-weight:bold; ");
+        document.getElementById("showMemberMatches").value = "";
+        document.getElementById("copiedText").value ="";
+        filterMemberTable();
+      }
+
+      function manageMemberFor(data) {
+
+      console.log("%cmanage member called","color:blue; font-weight:bold; ");
+      console.log(data);
+      sessionId = sessionStorage.sessionId;
+      let mnum = data.mnum;
+      var thisPerson = getStatus(data.mnum.toString());
+      let memberRegistered = thisPerson[1];
+      let memberChecked = thisPerson[2];
+      let memberZoomed  = thisPerson[3];
+      let memberTitle = data.memberTitle ;
+      let memberForename = data.memberForename;
+      let memberSurname  = data.memberSurname;
+      let rowId = data.rowId;
+      let regIconId = data.regIconId;
+      let checkIconId = data.checkIconId;
+      let zoomIconId =  data.zoomIconId;
+      let regButtonId = data.regButtonId;
+      let checkButtonId = data.checkButtonId;
+      let zoomButtonId = data.zoomButtonId;
+      let action = data.action;
+      let iconStyleSet;
+      let iconId;
+      var buttonId;
+	
+    if (action == 'register' && memberZoomed ) { // request is to in person register person but they are already zoom reg
+      document.getElementById("mainInstructions").innerHTML = `<span style="color:red; font-size:1em;">Already registered as Zoom attendee</span>`;
+      return
+    } else if (action == 'deregister' && !memberRegistered) { // request is to de register in person but they arenot registered
+      document.getElementById("mainInstructions").innerHTML = `<span style="color:red; font-size:1em;">Not currently registered</span>`;
+      return
+    } else if (action == 'deregister' && memberChecked) { // request is to de register but they are checked
+      document.getElementById("mainInstructions").innerHTML = `<span style="color:red; font-size:2em;">Uncheck member then retry</span>`;
+      return
+    } else if (action == 'check' && !memberRegistered) { // request is to check person but they are not registered so cannot be checked
+      document.getElementById("mainInstructions").innerHTML = `<span style = "color:red; font-size:1em;">Not registered as present In Person so cannot be checked</span>`;
+      return
+    } else if (action == 'uncheck' && !memberChecked) { // request is to uncheck in person but they are not already checked
+      document.getElementById("mainInstructions").innerHTML = `<span style="color:red; font-size:1em;">Not currently checked</span>`;
+      return
+    } else if (action == 'uncheck' && memberZoomed) { // request is to uncheck in person but they are zoomed
+      document.getElementById("mainInstructions").innerHTML = `<span style="color:red; font-size:1em;">Member is zoomed</span>`;
+      return
+    } else if (action == 'check' && memberZoomed) { // request is to check person but they are zoom reg
+      document.getElementById("mainInstructions").innerHTML = `<span style="color:red; font-size:1em;">Member is zoomed</span>`;
+      return
+    } else if (action == 'zoom' && memberRegistered) { // request is to zoom register person but they are already in person reg
+      document.getElementById("mainInstructions").innerHTML = `<span style = "color:red; font-size:1em;">Already registered as In Person attendee</span>`;
+      return
+    } else if (action == 'dezoom' && !memberZoomed) { // request is to dezoom in person but they are not zoomed
+      document.getElementById("mainInstructions").innerHTML = `<span style="color:red; font-size:1em;">Not currently zoomed</span>`;
+      return
+    } else if (action == 'deregister') {
+      console.log('action == deregister');
+      document.getElementById("mainInstructions").innerHTML = `Removing ${memberTitle} ${memberForename} ${memberSurname} from the register`;
+      console.log(`setting style for "${rowId}"`)
+      iconStyleSet = '1';
+      data.action = 'register';
+			// var params = "registerMemberFor(" + JSON.stringify(data) + ")";
+			// document.getElementById(`${regButtonId}`).setAttribute("onclick", params);
+      buttonId = regButtonId;
+      iconId = regIconId;
+      updateStatus(mnum, 1, false);
+     } else if(action == 'register'){
+      console.log('action == register');
+      document.getElementById("mainInstructions").innerHTML = `Adding ${memberTitle} ${memberForename} ${memberSurname} to the register`;
+      console.log(`setting style for "${rowId}"`)
+      iconStyleSet = '2';
+      data.action = 'deregister';
+			// var params = "registerMemberFor(" + JSON.stringify(data) + ")";
+			// document.getElementById(`${regButtonId}`).setAttribute("onclick", params);
+      buttonId = regButtonId;
+      iconId = regIconId;
+      updateStatus(mnum, 1, true);
+    } else if ( action== 'uncheck') {
+      console.log('action== uncheck');
+      document.getElementById("mainInstructions").innerHTML = `Marking ${memberTitle} ${memberForename} ${memberSurname} as NOT present`;
+      console.log(`setting style for "${rowId}"`)
+      iconStyleSet = '1';
+      data.action = 'check';
+			// var params = "registerMemberFor(" + JSON.stringify(data) + ")";
+			// document.getElementById(`${checkButtonId}`).setAttribute("onclick", params);
+      buttonId = checkButtonId;
+      iconId =checkIconId;
+      updateStatus(mnum, 2, false);
+    } else if(action == 'check'){
+      console.log('action == check');
+      document.getElementById("mainInstructions").innerHTML = `Marking ${memberTitle} ${memberForename} ${memberSurname} as present`;
+      console.log(`setting style for "${rowId}"`)
+      iconStyleSet = '2';      
+      data.action = 'uncheck';
+			// var params = "registerMemberFor(" + JSON.stringify(data) + ")";
+			// document.getElementById(`${checkButtonId}`).setAttribute("onclick", params);
+      buttonId = checkButtonId;
+      iconId =checkIconId;
+      updateStatus(mnum, 2, true);
+    } else if (action== 'dezoom'){
+      console.log('action== dezoom');
+      document.getElementById("mainInstructions").innerHTML = `Marking ${memberTitle} ${memberForename} ${memberSurname} as NOT attending via Zoom`;
+      console.log(`setting style for "${rowId}"`)
+      iconStyleSet = '1';      
+      data.action = 'zoom';
+			// var params = "registerMemberFor(" + JSON.stringify(data) + ")";
+			// document.getElementById(`${zoomButtonId}`).setAttribute("onclick", params);
+      buttonId = zoomButtonId;
+      iconId = zoomIconId;
+      updateStatus(mnum, 3, false);
+    } else if(action== 'zoom'){
+      console.log(`action== zoom`);
+      document.getElementById("mainInstructions").innerHTML = `Marking ${memberTitle} ${memberForename} ${memberSurname} as attending via Zoom`;
+      console.log(`setting style for "${rowId}"`);
+      iconStyleSet = '3';
+      data.action = 'dezoom';
+      buttonId = zoomButtonId;
+      iconId = zoomIconId;
+      updateStatus(mnum, 3, true);
+      } else {      
+      document.getElementById("mainInstructions").innerHTML = `Unrecognised action` + action;
+      console.log(`unrecognised ${action}`);
+      return;    
+      
+    }
+
+		console.log('data before send follows');
+		console.log(data);
+		let updatedStatus = getStatus(data.mnum.toString());
+		data.memberRegistered = updatedStatus[1];
+		data.memberChecked= updatedStatus[2];
+		data.memberZoomed = updatedStatus[3];
+
+    const rowElement = document.getElementById(`${rowId}`);
+    const iconElement = document.getElementById(`${iconId}`);
+
+    if (iconStyleSet === '1') {
+      rowElement.style.color = "black";
+      iconElement.innerHTML = "psychology_alt";
+      iconElement.style.color = "#a6a6a6";
+      iconElement.style.fontWeight = "normal";
+    } else if (iconStyleSet === '2' || iconStyleSet === '3') {
+      iconElement.innerHTML = iconStyleSet === '2' ? "how_to_reg" : "videocam";
+      iconElement.style.color = "red";
+      iconElement.style.fontWeight = "bold";
+    } else {
+      rowElement.style.color = "pink";
+      iconElement.innerHTML = "psychology_alt";
+      iconElement.style.color = "pink";
+      iconElement.style.fontWeight = "normal";
+    }   
+    var params = "manageMemberFor(" + JSON.stringify(data) + ")";
+    document.getElementById(`${buttonId}`).setAttribute("onclick", params);
+		google.script.run.withSuccessHandler(nextReg).manageMemberFor(data);
+	}
+
+  function switchPortrait(status){
+    console.log(`switchPortrait  ${status}`)
+    const iconElement = document.getElementById(`setDeviceStyleIcon`);
+    const buttonElement = document.getElementById(`setDeviceStyleButton`);
+    let instructions = document.getElementById("mainInstructions");
+
+
+    if(status){ // switch to phone Style  i.e. narrow, device keyboard only
+      localStorage.setDisplayStyle = 'phoneStyle'; // this is the current display style
+      // now set the button to switch back to normal
+      buttonElement .setAttribute("onclick", "switchPortrait(false)");
+      console.log(iconElement)
+      iconElement.innerHTML = "stay_current_landscape";
+      console.log(`switchPortrait received ${status}, button action set to switchPortrait(false), should now be displaying a landscape icon`);
+      instructions.innerHTML = "App set to phone mode only, click to switch back to tablet mode";
+    } else { // switch to tablet style
+      localStorage.setDisplayStyle = 'tabletStyle';
+      // now set the button to switch back to normal
+      buttonElement .setAttribute("onclick", "switchPortrait(true)");
+      iconElement.innerHTML = "stay_current_portrait";
+      console.log(`switchPortrait received ${status}, button action set to switchPortrait(true), should now be displaying a portrait icon`);
+      instructions.innerHTML = "App set to phone mode only, click to switch back to tablet mode";
+    }
+
+    setDeviceDisplayStyle();
+
+  }
+
+  // function setDeviceDisplayStyle(){
+
+  //   let leftSide = document.getElementById("leftSide");
+  //   let rightSide = document.getElementById("rightSide");
+  //   let currentLeftSideWidth = localStorage.getItem("portraitLeftSideWidth");
+	//   let currentRightSideWidth = localStorage.getItem("portraitRightSideWidth");
+  //   console.log(``)
+
+  //   if(localStorage.setDisplayStyle = 'phoneStyle'){
+
+  //     leftSide.style.width = "0%";
+	//     rightSide.style.width = "100%";
+
+  //   } else {
+
+  //     leftSide.style.width = "41%";
+	//     rightSide.style.width = "59%";
+
+  //   }
+
+  // }
+
+  function clearLocalStorage(){
+  localStorage.clear();
+  docment.getElementById("rightSide").style
+  }
+
+
+  const detectDeviceType = () => {
+  const str = window.navigator.userAgent;
+  console.log(`%cuser agent = ${str}`, "color:#eb34cc; font-weight:bold;");
+  let deviceType = '';
+
+  if (str.includes('Android') || str.includes('webOS') || str.includes('iPhone') || str.includes('iPad') || str.includes('iPod') || str.includes('BlackBerry') || str.includes('IEMobile') || str.includes('Opera Mini')) {
+    deviceType = 'Mobile';
+  } else {
+    deviceType = 'Desktop';
+  }
+
+  console.log(`%cdevice type = ${deviceType}`, "color:#eb34cc; font-weight:bold;");
+  localStorage.deviceType = deviceType;
+};
+
+
+function sendDeviceDetails(){
+
+  let deviceDetails = {};
+  deviceDetails.type = detectDeviceType;
+  deviceDetails.primaryScreenMode = localStorage.primaryScreenMode;
+  deviceDetails.secondaryScreenMode = localStorage.secondaryScreenMode;
+  deviceDetails.landscapeRightSideWidth = localStorage.landscapeRightSideWidth;
+   deviceDetails.landscapeLeftSideWidth = localStorage.landscapeLeftSideWidth;
+  deviceDetails.screenWidth = window.outerWidth;
+  deviceDetails.screenHeight = window.outerHeight;
+  deviceDetails.userAgent = window.navigator.userAgent;
+  deviceDetails.userName = sessionStorage.userName;
+  if (isSessionStorageKey("sessionId")){
+  deviceDetails.sessionId = sessionStorage.sessionId;  
+  } else {
+   deviceDetails.sessionId = 'session id not set';   
+  }
+
+
+  google.script.run.withSuccessHandler(sendDeviceDetailsHandler).logDeviceDetails(JSON.stringify(deviceDetails));
+
+
+}
+
+function sendDeviceDetailsHandler(response){
+  console.log(`%csendDeviceDetailsHandler received:: "${response}"`, "color:blue; font-weight:bold; ");
+
+}
+
+function refreshMembers(){
+  // requests refresh of members for all events from today onwards
+  let eventData = document.getElementById('eventsList').value;
+  let eventCode = eventData.slice(0,7);
+  console.log(`event data = ${eventData}`)
+  console.log(`event code = ${eventCode}`)
+  
+  let text = `This will update the register for ${eventData} to include any new members that have been downloaded from Beacon. Do you want to continue`;
+  if (confirm(text) == true) {
+    console.log(' updating register');
+    google.script.run.withSuccessHandler(refreshMembersHandler).updateMembersInThisRegister();
+  } else {
+    console.log('update cancelled')
+  } 
+  
+
+}
+
+function showUpdateOptions(){
+  // requests refresh of members for all events from today onwards
+  let updateMembersSection = document.getElementById('updateMembersSection');
+    
+  if (updateMembersSection.style.display === "none") {
+    updateMembersSection.style.display = "block";
+  } else {
+    updateMembersSection.style.display = "none";
+  }
+
+  
+  
+  
+
+}
+
+function refreshMembersHandler(response){
+  document.getElementById('mainInstructions').innerHTML = response.msg;
+  response.sessionIdOk = 'validSessionId';
+  response.sessionId = sessionStorage.sessionId;
+  // {eventCode: 'IPM:039', sessionId: '1699957225438', memberRegister: Array(361), sessionIdOk: 'validSessionId'}
+  console.log(response)
+  makeTable(response)
+  
+
+}
+
+
+const escapeHTMLPolicy = trustedTypes.createPolicy("myEscapePolicy", {
+  createHTML: (string) => string.replace(/</g, "&lt;"),
+});
+
+
+
+
+
+
+	</script>
+</body>
+
+</html>
