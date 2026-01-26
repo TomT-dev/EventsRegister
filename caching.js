@@ -15,6 +15,10 @@ function cacheMembersEventsUsers(){
   cacheUsers(false);
 }
 
+const MEMBER_DATABASE_ID = '1B9n1ogYbbWZyI2S1eSBrhRlTPbicTkVDoAe2zv2D2dQ';
+const EVENTS_DATABASE_ID = '1GzTrJ_T_Tyyikh7F2Uezf5Zjx7eNhoXZaSymLjRFJ2E';
+const EVENTS_REGISTER_ID = '1FwHzbMzO_iXtALkrQryf0YnjQf5uJ_ONh3-BCzCs_ss';
+
 
 function cacheMembers() {
 
@@ -23,13 +27,15 @@ function cacheMembers() {
   Name: Member database v2024: id: 1B9n1ogYbbWZyI2S1eSBrhRlTPbicTkVDoAe2zv2D2dQ
   */
 
-  const SS = SpreadsheetApp.openById('1B9n1ogYbbWZyI2S1eSBrhRlTPbicTkVDoAe2zv2D2dQ');
+  const SS = SpreadsheetApp.openById(MEMBER_DATABASE_ID);
   const membersWs = SS.getSheetByName('currentMembers');
   const numRows = membersWs.getRange(1, 2).getDataRegion().getLastRow() - 1;
   Logger.log('numrows ' + numRows)
   const data = membersWs.getRange(2, 1, numRows, 6).getValues();
   Logger.log(data);
-  let memberData = data.map(value => [value[0],value[2],value[3].toString().toUpperCase().slice(0,1),value[3],value[4],'','',value[5]])
+  let memberData = data
+    .filter(value => value[0] && value[0] != 0 && value[3])
+    .map(value => [value[0],value[2],value[3].toString().toUpperCase().slice(0,1),value[3],value[4],'','',value[5]])
   Logger.log(memberData[0]);
   //Logger.log(`[211.0, Mr, R, Robin, Adams, 01491 873303, , tarabridleway@btinternet.com]`)
   // [211.0, Mr, R, Robin, Adams, 01491 873303, , tarabridleway@btinternet.com]
@@ -57,16 +63,21 @@ function listMembersInCache() {
 }
 
 function cacheEvents(){
-  const SS = SpreadsheetApp.openById('1FwHzbMzO_iXtALkrQryf0YnjQf5uJ_ONh3-BCzCs_ss');
-  const ws = SS.getSheetByName('CurrentIPMEvents');
+  const SS = SpreadsheetApp.openById(EVENTS_DATABASE_ID);
+  const ws = SS.getSheetByName('Events');
   const numRows = ws.getRange(1, 2).getDataRegion().getLastRow() - 1;
-  Logger.log('numrows ' + numRows)
-  const eventsData = ws.getRange(2, 1, numRows, 4).getValues();
+  Logger.log('numrows ' + numRows);
+  const now = new Date().setHours(0, 0, 0, 0);
+  Logger.log(now)
+  // Date of event	Title	Presenter	Event Code
+  const eventsData = ws.getRange(2, 1, numRows, 9).getValues()
+                        .filter(value => value[5] == 'Monthly meeting')
+                        .filter(value => value[0] >= now )
+                        .map(value =>[value[0], value[1], value[2],value[8]])
+                        .sort((a, b) => a[0] - b[0]);
   Logger.log(eventsData);
   var scriptProperties = PropertiesService.getScriptProperties();
   scriptProperties.setProperty('eventsData', JSON.stringify(eventsData));
-
-
 }
 
 function getEventsFromProperties() {
@@ -108,7 +119,7 @@ function getNewSessionId(){
 }
 
 function wipeRestoreUsersCache(){
-  const SS = SpreadsheetApp.openById('1FwHzbMzO_iXtALkrQryf0YnjQf5uJ_ONh3-BCzCs_ss');
+  const SS = SpreadsheetApp.openById(EVENTS_REGISTER_ID);
   const ws = SS.getSheetByName('Users');
   const numRows = ws.getRange(1, 2).getDataRegion().getLastRow() - 1;
   Logger.log('numrows ' + numRows)
@@ -130,7 +141,7 @@ function testnewcacheUsers(){
 function cacheUsers(update = false){
 
  
-  const SS = SpreadsheetApp.openById('1FwHzbMzO_iXtALkrQryf0YnjQf5uJ_ONh3-BCzCs_ss');
+  const SS = SpreadsheetApp.openById(EVENTS_REGISTER_ID);
   const ws = SS.getSheetByName('Users');
   const numRows = ws.getRange(1, 2).getDataRegion().getLastRow() - 1;
   Logger.log('number of users = ' + numRows)
@@ -198,6 +209,10 @@ function listUsersInCache() {
   var scriptProperties = PropertiesService.getScriptProperties();
   Logger.log(JSON.parse(scriptProperties.getProperty('usersData')));
 
+}
+
+function testgetEventRegister(){
+  getEventRegister('MM-Jan-26/01')
 }
 
 
@@ -313,7 +328,8 @@ function deleteAllRegisters(){
 }
 
 function testdeleteTheseRegisters(){
-  deleteTheseRegisters(['IPM:038']);
+  deleteTheseRegisters(['MM-Jan-26/01_Register']);
+  //
 }
 
 function deleteTheseRegisters(registers) { // registers is an array of event codes

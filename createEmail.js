@@ -17,7 +17,9 @@ function createPDFRegisterFor(eventCodeDetails) {
 
   // get the registrations
 
-  var thisEventData = 'registerEvent' + eventCodeDetails.toString().slice(0,7);
+  // Extract event code (before comma or first space)
+  var eventCode = eventCodeDetails.toString().split(',')[0].trim();
+  var thisEventData = 'registerEvent' + eventCode;
   var scriptProperties = PropertiesService.getScriptProperties();
   var memberRegister = [];
 

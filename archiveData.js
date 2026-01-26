@@ -19,7 +19,7 @@ function populateMemberDataForTesting(){
 
   // now uses the Member database v2023
 
-  const SS = SpreadsheetApp.openById('1B9n1ogYbbWZyI2S1eSBrhRlTPbicTkVDoAe2zv2D2dQ');
+  const SS = SpreadsheetApp.openById(MEMBER_DATABASE_ID);
   const membersWs = SS.getSheetByName('currentMembers+Joiners');
   const numRows = membersWs.getRange(1, 2).getDataRegion().getLastRow() - 1;
   Logger.log('numrows ' + numRows)

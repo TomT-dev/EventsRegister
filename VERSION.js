@@ -19,6 +19,13 @@ const VERSION_HISTORY = [
     machine: 'tom-HP-Pavilion-Laptop-16-af0xxx',
     changes: 'Add VERSION.js tracking for deployments'
   }
+  ,
+  {
+    version: 73,
+    date: '2026-01-26 17:57',
+    machine: 'tom-HP-Pavilion-Laptop-16-af0xxx',
+    changes: 'Changed to handle new event code format'
+  }
     // Add new entries above this line
 ];
 
