@@ -26,6 +26,13 @@ const VERSION_HISTORY = [
     machine: 'tom-HP-Pavilion-Laptop-16-af0xxx',
     changes: 'Changed to handle new event code format'
   }
+  ,
+  {
+    version: 74,
+    date: '2026-01-31 14:54',
+    machine: 'tom-HP-Pavilion-Laptop-16-af0xxx',
+    changes: 'Fixed send register by email - new event codes not handled correctly'
+  }
     // Add new entries above this line
 ];
 

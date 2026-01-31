@@ -73,7 +73,7 @@ function cacheEvents(){
   const eventsData = ws.getRange(2, 1, numRows, 9).getValues()
                         .filter(value => value[5] == 'Monthly meeting')
                         .filter(value => value[0] >= now )
-                        .map(value =>[value[0], value[1], value[2],value[8]])
+                        .map(value =>[value[0], value[1], value[2],value[8].toString().replace("/","-")])
                         .sort((a, b) => a[0] - b[0]);
   Logger.log(eventsData);
   var scriptProperties = PropertiesService.getScriptProperties();
@@ -362,5 +362,12 @@ Logger.log('deleting ' + registers.length + ' registers: ' + registers);
 
 
 
+}
+
+
+
+function sliceit(){
+  const f = 'registerEventMM-Mar-26-01, 26/03'
+  Logger.log(f.slice(0,f.indexOf(",")));
 }
 

@@ -64,7 +64,7 @@ function getEventListSelectHtml(){
   var events = JSON.parse(scriptProperties.getProperty('eventsData'));  
   Logger.log(events);
   Logger.log(typeof events)
-  eventsList = events.map(value => value[3] + ', ' + new Date(value[0]).toLocaleDateString('en-GB')  + ', ' + value[1].slice(0,50));
+  eventsList = events.map(value => value[3].toString().replace("/", "-") + ', ' + new Date(value[0]).toLocaleDateString('en-GB')  + ', ' + value[1].slice(0,50));
   var eventsListHtml = '<option value="" disabled selected hidden>Select an event</option>';
         for (var i = 0; i < eventsList.length; i++) {
           eventsListHtml = eventsListHtml + `<option class = "eventSelectOption" value="${eventsList[i].toString().slice(0,19)}">${eventsList[i]}</option>`;

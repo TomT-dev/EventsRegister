@@ -1198,7 +1198,7 @@ function updateTable() {
 	console.log("%cupdate table called, selected event details = " +  selectedEventDetails,"color:blue; font-weight:bold; ");
   document.getElementById("eventRegisterFor").innerHTML = "Getting data from server";
 	sessionId = sessionStorage.sessionId;
-	var eventCode = selectedEventDetails.toString().slice(0,7);
+	var eventCode = selectedEventDetails.toString().slice(0,selectedEventDetails.toString().indexOf(","))
 	var data = [sessionId, eventCode];
 	console.log("data sent is");
 	console.log(data);

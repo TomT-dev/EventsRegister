@@ -1,30 +1,44 @@
 function testcreatePDFRegisterFor(){
-createPDFRegisterFor('IPM:032, 30/03/2023');
+createPDFRegisterFor('MM-Jan-26-01');
 }
 
-function createPDFRegistersForTheseEvents(eventsDetails){
-  Logger.log(eventsDetails);
-  Logger.log('number of events = ' + eventsDetails.length);
+function createPDFRegistersForTheseEvents(deleteEventCodes){
+  Logger.log(eventCodes);
+  Logger.log('number of events = ' + eventCodes.length);
 
 
 }
 
-function createPDFRegisterFor(eventCodeDetails) {
-  Logger.log(eventCodeDetails)
+function getprops(){
+ var scriptProperties = PropertiesService.getScriptProperties();
+//  const keys = scriptProperties.getKeys();
+//  Logger.log(keys) 
+//  const jan = scriptProperties.getProperty('registerEventMM-Jan-');
+//  Logger.log(jan)
+//  scriptProperties.setProperty('registerEventMM-Jan-26-01',jan)
+//  Logger.log(scriptProperties.getProperty('registerEventMM-Jan-26-01'));
+//  scriptProperties.deleteProperty('registerEventMM-Jan-');
+//  scriptProperties.deleteProperty('registerEventMM-Feb-');
+//  scriptProperties.deleteProperty('registerEventMM-Mar-');
+scriptProperties.deleteProperty('registerEventMM-Apr-26-01');
+scriptProperties.deleteProperty('registerEventMM-Mar-26-01, 26/03');
+ 
+}
+
+function createPDFRegisterFor(eventCode) {
+  Logger.log(`createPDFRegisterFor received event code: ${eventCode}`)
   var d = new Date()
   var timeCreated = d.toString().slice(0,24);
   Logger.log(timeCreated);
 
   // get the registrations
-
-  // Extract event code (before comma or first space)
-  var eventCode = eventCodeDetails.toString().split(',')[0].trim();
   var thisEventData = 'registerEvent' + eventCode;
+  Logger.log(`Looking for data for ${thisEventData} ${thisEventData.length}`);
   var scriptProperties = PropertiesService.getScriptProperties();
   var memberRegister = [];
 
-  memberRegister = JSON.parse(ScriptProperties.getProperty(thisEventData));
-  Logger.log(memberRegister);
+  memberRegister = JSON.parse(scriptProperties.getProperty(thisEventData));
+  //Logger.log(memberRegister);
   var tableData = [['#', 'Mnum', 'Name']];
   var lineNum = 0;
   for(var x = 0 ; x < memberRegister.length ; x++){
@@ -57,7 +71,7 @@ function createPDFRegisterFor(eventCodeDetails) {
 
   var templateDocId = '1PG01VspAN907eGUynlGhl448OQGWar2ItOZG_r3R8j4';
   var pdfTemplateFile = DriveApp.getFileById(templateDocId );
-  var pdfFilename = eventCodeDetails + ' register, created on ' + timeCreated;
+  var pdfFilename = eventCode + ' register, created on ' + timeCreated;
   var pdfFolder = DriveApp.getFolderById('1XRqF1OiwjtuLr7wd-ai-7DOuz8q_O2E0');
   var pdfFile= pdfTemplateFile.makeCopy(pdfFilename, pdfFolder);
   var docId = pdfFile.getId();
@@ -71,7 +85,7 @@ function createPDFRegisterFor(eventCodeDetails) {
   hdrStyle[DocumentApp.Attribute.FOREGROUND_COLOR] = '#005ab8';
   hdrStyle[DocumentApp.Attribute.FONT_SIZE] = 18;
   hdrStyle[DocumentApp.Attribute.BOLD] = true;
-  var hdrText = 'Event register for ' + eventCodeDetails;
+  var hdrText = 'Event register for ' + eventCode;
   hdr.setText(hdrText);
   hdr.setAttributes(hdrStyle);
   //get the body section of document

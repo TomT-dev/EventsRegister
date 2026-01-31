@@ -737,7 +737,8 @@ function max(input) {
 }
 
 function emailRegisterFor(eventCodeDetails) {
-  Logger.log(eventCodeDetails);
+  eventCode = eventCodeDetails.toString().split(',')[0].trim().replace("/","-")
+  Logger.log(eventCode);
   try {
     var msg;
     const SS = SpreadsheetApp.openById('1FwHzbMzO_iXtALkrQryf0YnjQf5uJ_ONh3-BCzCs_ss');
@@ -746,8 +747,8 @@ function emailRegisterFor(eventCodeDetails) {
     Logger.log('numrows ' + numRows)
     const emailAddresses = emailToWs.getRange(1, 1, numRows, 1).getValues().toString();
     Logger.log(emailAddresses);
-    var emailSubject = 'Register for ' + eventCodeDetails
-    var fileId = createPDFRegisterFor(eventCodeDetails);
+    var emailSubject = 'Register for ' + eventCode
+    var fileId = createPDFRegisterFor(eventCode);
     var htmlBody = doc_to_html(fileId);
 
     GmailApp.sendEmail(emailAddresses, emailSubject, 'you cannot receive the event register, contact Tom', {
@@ -755,11 +756,11 @@ function emailRegisterFor(eventCodeDetails) {
 
     });
 
-    msg = "The register for " + eventCodeDetails + " has been emailed to the designated contacts";
+    msg = "The register for " + eventCode + " has been emailed to the designated contacts";
   } catch (e) {
     Logger.log(JSON.stringify(e));
     var d = new Date();
-    msg = "There has been an error, contact Tom and give himthe following date and time: " + d;
+    msg = "There has been an error, contact Tom and give him the following date and time: " + d;
   }
   return msg
 
