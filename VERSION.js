@@ -33,6 +33,13 @@ const VERSION_HISTORY = [
     machine: 'tom-HP-Pavilion-Laptop-16-af0xxx',
     changes: 'Fixed send register by email - new event codes not handled correctly'
   }
+  ,
+  {
+    version: 75,
+    date: '2026-02-15 11:00',
+    machine: 'tom-HP-Pavilion-Laptop-16-af0xxx',
+    changes: 'Colour changes to match Groups app'
+  }
     // Add new entries above this line
 ];
 

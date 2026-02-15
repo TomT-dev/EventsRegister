@@ -36,10 +36,13 @@ body {
 	}
 	
 	.right {
-		right: 0;
-		width: 50%;
-		background-color: none;
+    right: 0;
+    width: 50%;
+    background-color: none;
     padding-left:0px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 	}
 	
 	.centered {
@@ -59,7 +62,8 @@ body {
 	.keyboard_button {
 		width: 40px;
     height: 40px;
-		border-radius: 4px;
+    border: 2px solid #005ab8;
+    border-radius: 4px;
     text-align: center;
     padding-left:0px;
     padding-right: 0px;
@@ -249,10 +253,10 @@ body {
 	
 	 td {
         padding: 8px 16px;
-        border: 1px solid #ccc;
+        border: 1px solid #005ab8;
       }
 	th {
-		border: 1px solid #2886e6;
+    border: 1px solid #005ab8;
 		text-align: left;
 		padding: 8px;
     background: #eee;
@@ -309,7 +313,7 @@ body {
 		padding: .5vw;
 		font-family: DMSans, sans-serif;
     font-size: 0.875em; 
-    margin-left:3vw;
+    margin-left:3.5vw;
 	}
 	
 	.grid-item {
@@ -358,7 +362,19 @@ body {
 		font-size: 1.2vw;
 		text-align: left;
 		grid-column: 1 / span 3;
-		font-family: DMSans, sans-serif;
+    font-family: DMSans, sans-serif;
+  }
+
+  .action-buttons-grid-container button {
+    border: 2px solid #005ab8;
+  }
+
+  .action-buttons-grid-container button .material-icons,
+  /* Set border color for eventsList and showMemberMatches */
+  .action-buttons-grid-container button .material-symbols-outlined {
+    color: #005ab8;
+  }
+  }
 	}
 	/* input fields for use in grid */
 	
@@ -539,14 +555,14 @@ body {
 	</div>
 </div>
 <div id="mainSection" style="display:none;">
-	<div id="leftSide" class="split left">
+	<div id="leftSide" class="split left" style = "background-color: #a4ccf4;">
 		<div style="margin-left: 2vw; margin-right: 2vw;">
 			<div class="instructions-grid-container">
 				<div class="grid-item.ip">
-					<button id="showTuningBtn" onclick="showTuningControls()" style=" align:right; border:none; background-color: #f2f2f2;"><i class="material-icons nav" id="showTuningIcon" style="width:100%; height:auto; align:left;"><span class="material-icons">tune</span></i></button>
+          <button id="showTuningBtn" onclick="showTuningControls()" style=" align:right; border:none; background-color: #a4ccf4;"><i class="material-icons nav" id="showTuningIcon" style="width:100%; height:auto; align:left;"><span class="material-icons" style="color:#005ab8;">tune</span></i></button>
 				</div>
 				<div class="grid-item.ip">
-					<input type="text" id="copiedText" style="width:35vw; margin-bottom:2vw;" disabled placeholder="Filter table: Use virtual keyboard"> </div>
+          <input type="text" id="copiedText" style="width:35vw; margin-bottom:2vw; background-color: #e6f1ff; border: 2px solid #005ab8;" disabled placeholder="Filter table: Use virtual keyboard"> </div>
 			</div>
 			<div id="VirtualKey">
 				<div class="keyboard-row">
@@ -609,13 +625,13 @@ body {
 			<div id="topBox">
 				<div class="instructions-grid-container">
 					<div class="grid-item.ip">
-						<button id="showKbd" onclick="showKeyboard(false)" style="border-radius: 4px; align:left;  border:none; background-color:white; outline: none;"><i class="material-icons nav" id="showKbdIcon" style="width:100%; height:auto; "><span class="material-icons">chevron_left</span></i></button>
+						<button id="showKbd" onclick="showKeyboard(false)" style="border-radius: 4px; align:left;  border:none; background-color:white; outline: none;"><i class="material-icons nav" id="showKbdIcon" style="width:100%; height:auto; color:#005ab8; "><span class="material-icons">chevron_left</span></i></button>
 					</div>
 					<div class="grid-item.ip">
-						<p id="mainInstructions" style="color:black; font-weight:bold; font-size:1vw; height:1vw;"></p>
+						<p id="mainInstructions" style="color:#005ab8; font-weight:bold; font-size:1vw; height:1vw; margin-left:.5vw;"></p>
 					</div>
 					<div class="grid-item.ip">
-						<i class="material-icons md-40" id="setDeviceStyleIcon" style="width:100%; height:auto; margin-left: auto; margin-right: auto;">stay_current_landscape</i>
+            <i class="material-icons md-40" id="setDeviceStyleIcon" style="width:100%; height:auto; margin-left: auto; margin-right: auto; color:#005ab8;">stay_current_landscape</i>
 					</div>
 				</div>
 				<br>
@@ -654,7 +670,7 @@ body {
 				<br>
 				<div class="select-grid-container">
 					<div class="grid-item">
-						<select name="events" id="eventsList" style="padding:.5vw 0vw .5vw 0vw; width:39vw; margin-left:4vw;">
+            <select name="events" id="eventsList" style="padding:.5vw 0vw .5vw 0vw; width:39vw; margin-left:4vw; border:2px solid #005ab8;">
 							<?!= getEventListSelectHtml();?>
 						</select>
 					</div>
@@ -663,13 +679,13 @@ body {
 				<div id="rightArea" style="margin-left: 1vw; margin-right: 2vw;">
 					<div style="margin-left: 4vw; margin-right: 2vw;">
 						<div>
-							<button id="savedSearch" class="ssbutton" value="yes" onclick="savedSearch()" style=" align:right;  background-color: white; border: none;"><i class="material-icons nav" style="width:100%; height:auto; align:left;"><span class="material-icons" id = "savedSearchIcon" style = "padding-top:.25vw;">saved_search</span></i></button>
-							<input type="text" id="showMemberMatches" onkeyup="filterMemberTable()" style="width:30vw; margin-bottom:0vw;" placeholder="Filter table:Click in here to use device keyboard" title="Type in a name">
-							<button id="clearSearch" class="ssbutton" value="yes" onclick="clearSearch()" style=" align:right;  background-color: white; border: none;"><i class="material-icons nav" style="width:100%; height:auto; align:left;"><span class="material-icons material-symbols-outlined" id = "clearSearchIcon" style = "padding-top:.25vw; colour:black; background-color:white;">backspace</span></i></button>
+              <button id="savedSearch" class="ssbutton" value="yes" onclick="savedSearch()" style=" align:right;  background-color: white; border: none;"><i class="material-icons nav" style="width:100%; height:auto; align:left;"><span class="material-icons" id = "savedSearchIcon" style = "padding-top:.25vw; color:#005ab8;">saved_search</span></i></button>
+              <input type="text" id="showMemberMatches" onkeyup="filterMemberTable()" style="width:30vw; margin-bottom:0vw; border:2px solid #005ab8;" placeholder="Filter table:Click in here to use device keyboard" title="Type in a name">
+              <button id="clearSearch" class="ssbutton" value="yes" onclick="clearSearch()" style=" align:right;  background-color: white; border: none;"><i class="material-icons nav" style="width:100%; height:auto; align:left;"><span class="material-icons material-symbols-outlined" id = "clearSearchIcon" style = "padding-top:.25vw; colour:black; background-color:white; color:#005ab8;">backspace</span></i></button>
 						</div>
 							<div class="grid-container">
 								<div class="grid-item.ip">
-									<label id="eventRegisterFor" style="font-size: 1.5vw; width: 65vw; color:#63c369;"><b></b></label>
+									<label id="eventRegisterFor" style="font-size: 1.5vw; width: 65vw; color:#005ab8;"><b></b></label>
 								</div>
 							</div>
 					</div>
@@ -857,11 +873,16 @@ function responseHandlerCheckUserGetSessionId(response) {
           if(JSON.parse(sessionStorage.todaysEventsList).length > 0){    
             console.log('setting icon to give switching to todays events')
             document.getElementById("showTodayIcon").innerHTML = "today";
+            document.getElementById("showTodayIcon").style.color = "#005ab8";
+            document.getElementById("showTodayBtn").style.border = "2px solid #005ab8";
+            document.getElementById("showTodayBtn").style.background = "white";
+            document.getElementById("showTodayBtn").disabled = false;
           } else {
             console.log('greying out icon and disabling switch to todays events cos there arent any')
             document.getElementById("showTodayIcon").style.color = "lightgray";
             document.getElementById("showTodayIcon").innerHTML = "event_busy";
             document.getElementById("showTodayIcon").style.background = "none";
+            document.getElementById("showTodayBtn").style.border = "2px solid lightgray";
             document.getElementById("showTodayBtn").style.background = "#f2f2f2";
             document.getElementById("showTodayBtn").disabled = true;
           }        
@@ -1132,7 +1153,7 @@ function nextReg(response) {
   console.log("%cnextReg called","color:blue; font-weight:bold; ");
 	console.log(response);
 	document.getElementById("mainInstructions").innerHTML = response.status;
-  document.getElementById("mainInstructions").style.color = "#63c369";
+  document.getElementById("mainInstructions").style.color = "#005ab8";
   filterText = document.getElementById("showMemberMatches").value;
   console.log("filtertext = " + filterText);
 	document.getElementById("showMemberMatches").value = "";
@@ -1563,14 +1584,25 @@ function getTodayDateString() {
 
 function showTuningControls() {
 	console.log("%c showing tuning controls","color:blue; font-weight:bold; ");
-	if (!showTuningControl) {
-		showTuningControl = true;
-		document.getElementById("screenAdjustment").style.display = "block";
-
-	} else {
-		showTuningControl = false;
-		document.getElementById("screenAdjustment").style.display = "none";
-	}
+  if (!showTuningControl) {
+    // Reset split to 50/50 and local storage when opening tuning controls
+    if (typeof resetTuning === 'function') {
+      resetTuning();
+    }
+    leftSideWidth = 50;
+    rightSideWidth = 50;
+    var splitSlider = document.getElementById("newSplit");
+    if (splitSlider) splitSlider.value = 50;
+    var leftSide = document.getElementById("leftSide");
+    var rightSide = document.getElementById("rightSide");
+    if (leftSide) leftSide.style.width = "50%";
+    if (rightSide) rightSide.style.width = "50%";
+    showTuningControl = true;
+    document.getElementById("screenAdjustment").style.display = "block";
+  } else {
+    showTuningControl = false;
+    document.getElementById("screenAdjustment").style.display = "none";
+  }
 }
 
 function saveTuning() {
