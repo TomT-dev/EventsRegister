@@ -13,7 +13,16 @@ function enterFullScreen() {
 }
 
 function exitFullScreen() {
-  document.exitFullscreen();
+  if (document.fullscreenElement) {
+    document.exitFullscreen();
+    setTimeout(function() {
+      if (document.fullscreenElement) {
+        alert('Unable to exit fullscreen automatically. Please use Esc or Alt+F4 to exit fullscreen.');
+      }
+    }, 500);
+  } else {
+    alert('Not in fullscreen mode.');
+  }
 }
 
 function updateFullscreenIcon() {
@@ -579,22 +588,39 @@ body {
 
 <body onload="initPage()">
 <div id="loginSection" style="display:none;">
-	<div style="margin-left: 2vw; margin-right: 2vw;">
-		<label style="font-size: 2.5vw; width: 70vw; color:#63c369;"><b>Login</b></label>
-		<br>
-		<label>User Name</label>
-		<br>
-		<input type="text" id="login_username" placeholder="UserId" name="username">
-		<br>
-		<label>Password</label>
-		<br>
-		<input type="password" id="login_password" name="password" placeholder="password" />
-		<br>
-		<br>
-		<button id="loginbtn" onclick="login()" style="border-radius: 4px; ">Login</button>
-		<p id="loginInstructions"></p>
-	</div>
+  <div style="margin-left: 2vw; margin-right: 2vw;">
+    <label style="font-size: 2.5vw; width: 70vw; color:#63c369;"><b>Login</b></label>
+    <br>
+    <label>User Name</label>
+    <br>
+    <input type="text" id="login_username" placeholder="UserId" name="username">
+    <br>
+    <label>Password</label>
+    <br>
+    <input type="password" id="login_password" name="password" placeholder="password" />
+    <br>
+    <br>
+    <button id="loginbtn" onclick="login()" style="border-radius: 4px; ">Login</button>
+    <p id="loginInstructions"></p>
+  </div>
 </div>
+<script>
+// Enable login on Enter key for login fields
+function loginKeyHandler(e) {
+  if (e.key === 'Enter') {
+    login();
+  }
+}
+function enableLoginEnter() {
+  document.getElementById('login_username').addEventListener('keydown', loginKeyHandler);
+  document.getElementById('login_password').addEventListener('keydown', loginKeyHandler);
+}
+function disableLoginEnter() {
+  document.getElementById('login_username').removeEventListener('keydown', loginKeyHandler);
+  document.getElementById('login_password').removeEventListener('keydown', loginKeyHandler);
+}
+document.addEventListener('DOMContentLoaded', enableLoginEnter);
+</script>
 <div id="mainSection" style="display:none;">
 	<div id="leftSide" class="split left" style = "background-color: #a4ccf4;">
 		<div style="margin-left: 2vw; margin-right: 2vw;">
@@ -730,8 +756,14 @@ function attachCloseAppIconHandler() {
       try {
         window.close();
         console.log('[closeAppIcon] window.close() called');
+        setTimeout(function() {
+          if (!window.closed) {
+            alert('Unable to close window automatically. Please use Alt+F4 or close the tab manually.');
+          }
+        }, 500);
       } catch (e) {
         console.log('[closeAppIcon] window.close() error:', e);
+        alert('Unable to close window automatically. Please use Alt+F4 or close the tab manually.');
       }
     };
   } else {
@@ -910,6 +942,10 @@ function login() {
 }
 
 function responseHandlerCheckUserGetSessionId(response) {
+  // Disable Enter key login after successful login
+  if (response.valid) {
+    disableLoginEnter();
+  }
   console.log("%cresponseHandlerCheckUserGetSessionId called", "color:red; font-weight: bold;");	
 	console.log(response);
 

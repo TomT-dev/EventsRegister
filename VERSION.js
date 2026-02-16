@@ -47,6 +47,13 @@ const VERSION_HISTORY = [
     machine: 'tom-HP-Pavilion-Laptop-16-af0xxx',
     changes: 'full screen icons added'
   }
+  ,
+  {
+    version: 78,
+    date: '2026-02-16 11:46',
+    machine: 'tom-HP-Pavilion-Laptop-16-af0xxx',
+    changes: 'Enter button for login enabled'
+  }
     // Add new entries above this line
 ];
 
