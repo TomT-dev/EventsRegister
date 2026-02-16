@@ -40,6 +40,13 @@ const VERSION_HISTORY = [
     machine: 'tom-HP-Pavilion-Laptop-16-af0xxx',
     changes: 'Colour changes to match Groups app'
   }
+  ,
+  {
+    version: 76,
+    date: '2026-02-16 11:23',
+    machine: 'tom-HP-Pavilion-Laptop-16-af0xxx',
+    changes: 'full screen icons added'
+  }
     // Add new entries above this line
 ];
 

@@ -1,3 +1,42 @@
+<script>
+// Fullscreen/desktop detection and icon toggle
+function isDesktop() {
+  return !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+
+function isFullScreen() {
+  return document.fullscreenElement != null;
+}
+
+function enterFullScreen() {
+  document.documentElement.requestFullscreen();
+}
+
+function exitFullScreen() {
+  document.exitFullscreen();
+}
+
+function updateFullscreenIcon() {
+  const slot = document.getElementById('fullscreenIconSlot');
+  if (!slot) return;
+  if (!isDesktop()) {
+    slot.innerHTML = '';
+    return;
+  }
+  if (isFullScreen()) {
+    slot.innerHTML = `<span class="material-symbols-outlined" id="exitFullscreenIcon" style="cursor:pointer;">close_fullscreen</span>`;
+    document.getElementById('exitFullscreenIcon').onclick = exitFullScreen;
+  } else {
+    slot.innerHTML = `<span class="material-symbols-outlined" id="enterFullscreenIcon" style="cursor:pointer;">zoom_out_map</span>`;
+    document.getElementById('enterFullscreenIcon').onclick = enterFullScreen;
+  }
+}
+
+document.addEventListener('fullscreenchange', updateFullscreenIcon);
+document.addEventListener('DOMContentLoaded', function() {
+  updateFullscreenIcon();
+});
+</script>
 <!DOCTYPE html>
 <html>
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -13,6 +52,8 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.2/pdfmake.min.js" integrity="sha512-Yf733gmgLgGUo+VfWq4r5HAEaxftvuTes86bKvwTpqOY3oH0hHKtX/9FfKYUcpaxeBJxeXvcN4EY3J6fnmc9cA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.2/vfs_fonts.js" integrity="sha512-cktKDgjEiIkPVHYbn8bh/FEyYxmt4JDJJjOCu5/FQAkW4bc911XtKYValiyzBiJigjVEvrIAyQFEbRJZyDA1wQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <!-- Material Symbols Outlined font -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
 	<style>
 body {
 		font-family: Arial;
@@ -294,11 +335,11 @@ body {
 		font-family: DMSans, sans-serif;
 	}
   .instructions-grid-container {
-		display: inline-grid;
-		grid-template-columns: 4vw 36vw 4vw;
-		padding: .5vw;
-		font-family: DMSans, sans-serif;
-	}
+    display: inline-grid;
+    grid-template-columns: 4vw 36.5vw 2vw 2vw; /* 4 slots: adjust widths as needed */
+    padding: .5vw;
+    font-family: DMSans, sans-serif;
+  }
 	
 	.select-grid-container {
 		display: inline-grid;
@@ -622,18 +663,19 @@ body {
 			</div>
 		</div>
 		<div id="rightSide" class="split right">
-			<div id="topBox">
-				<div class="instructions-grid-container">
-					<div class="grid-item.ip">
-						<button id="showKbd" onclick="showKeyboard(false)" style="border-radius: 4px; align:left;  border:none; background-color:white; outline: none;"><i class="material-icons nav" id="showKbdIcon" style="width:100%; height:auto; color:#005ab8; "><span class="material-icons">chevron_left</span></i></button>
-					</div>
-					<div class="grid-item.ip">
-						<p id="mainInstructions" style="color:#005ab8; font-weight:bold; font-size:1vw; height:1vw; margin-left:.5vw;"></p>
-					</div>
-					<div class="grid-item.ip">
-            <i class="material-icons md-40" id="setDeviceStyleIcon" style="width:100%; height:auto; margin-left: auto; margin-right: auto; color:#005ab8;">stay_current_landscape</i>
-					</div>
-				</div>
+        <div id="topBox">
+          <div class="instructions-grid-container">
+            <div class="grid-item.ip">
+              <button id="showKbd" onclick="showKeyboard(false)" style="border-radius: 4px; align:left;  border:none; background-color:white; outline: none;"><i class="material-icons nav" id="showKbdIcon" style="width:100%; height:auto; color:#005ab8; "><span class="material-icons">chevron_left</span></i></button>
+            </div>
+            <div class="grid-item.ip">
+              <p id="mainInstructions" style="color:#005ab8; font-weight:bold; font-size:1vw; height:1vw; margin-left:.5vw;"></p>
+            </div>
+            <div class="grid-item.ip" id="fullscreenIconSlot"></div>
+            <div class="grid-item.ip" id="closeIconSlot">
+              <span class="material-symbols-outlined" id="closeAppIcon" style="cursor:pointer;">close</span>
+            </div>
+          </div>
 				<br>
 				<div class="action-buttons-grid-container">
 					<button id="refreshBtn" onclick="updateTable()" style=" align:right;  background-color: white; margin: 0.1vw 1vw 0.1vw 1vw; border-radius: 5px;"><i class="material-icons nav" style="width:100%; height:auto; align:left;"><span class="material-icons" id = "refreshBtnIcon" style = "padding-top:.25vw;">cloud_sync</span></i></button>
@@ -676,7 +718,34 @@ body {
 					</div>
 					<div class="grid-item"> </div>
 				</div>
-				<div id="rightArea" style="margin-left: 1vw; margin-right: 2vw;">
+        <div id="rightArea" style="margin-left: 1vw; margin-right: 2vw;">
+<script>
+// Close icon action
+function attachCloseAppIconHandler() {
+  var closeIcon = document.getElementById('closeAppIcon');
+  if (closeIcon) {
+    console.log('[closeAppIcon] Handler attached');
+    closeIcon.onclick = function() {
+      console.log('[closeAppIcon] Clicked');
+      try {
+        window.close();
+        console.log('[closeAppIcon] window.close() called');
+      } catch (e) {
+        console.log('[closeAppIcon] window.close() error:', e);
+      }
+    };
+  } else {
+    console.log('[closeAppIcon] Icon not found');
+  }
+}
+// Attach on DOMContentLoaded and whenever fullscreen icon is updated (in case the close icon is re-rendered)
+document.addEventListener('DOMContentLoaded', function() {
+  attachCloseAppIconHandler();
+});
+// Also observe DOM changes in case the icon is re-rendered
+const closeIconObserver = new MutationObserver(attachCloseAppIconHandler);
+closeIconObserver.observe(document.body, { childList: true, subtree: true });
+</script>
 					<div style="margin-left: 4vw; margin-right: 2vw;">
 						<div>
               <button id="savedSearch" class="ssbutton" value="yes" onclick="savedSearch()" style=" align:right;  background-color: white; border: none;"><i class="material-icons nav" style="width:100%; height:auto; align:left;"><span class="material-icons" id = "savedSearchIcon" style = "padding-top:.25vw; color:#005ab8;">saved_search</span></i></button>
