@@ -54,6 +54,13 @@ const VERSION_HISTORY = [
     machine: 'tom-HP-Pavilion-Laptop-16-af0xxx',
     changes: 'Enter button for login enabled'
   }
+  ,
+  {
+    version: 79,
+    date: '2026-02-20 11:41',
+    machine: 'tom-HP-Pavilion-Laptop-16-af0xxx',
+    changes: 'Extend tabe size'
+  }
     // Add new entries above this line
 ];
 
