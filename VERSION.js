@@ -61,6 +61,13 @@ const VERSION_HISTORY = [
     machine: 'tom-HP-Pavilion-Laptop-16-af0xxx',
     changes: 'Extend tabe size'
   }
+  ,
+  {
+    version: 80,
+    date: '2026-03-28 17:21',
+    machine: 'tom-HP-Pavilion-Laptop-16-af0xxx',
+    changes: 'Fixed add guest'
+  }
     // Add new entries above this line
 ];
 

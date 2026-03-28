@@ -1583,6 +1583,10 @@ function changekeySize() {
 
 function addGuest() {
 	console.log("%cadding guest","color:blue; font-weight:bold; ");
+	if (!selectedEventDetails) {
+		document.getElementById("mainInstructions").innerHTML = `<span style="color:red; font-size:1em;">Please select an event before adding a guest</span>`;
+		return;
+	}
 	if (!showAddGuest) {
 		showAddGuest = true;
 		document.getElementById("addGuestSection").style.display = "block";
@@ -1600,10 +1604,18 @@ function registerGuest() {
 	var guestForename = document.getElementById("guestForename").value
 	var guestSurname = document.getElementById("guestSurname").value
 	var guestPhone = document.getElementById("guestPhone").value;
+	var eventCode = selectedEventDetails ? selectedEventDetails.slice(0,selectedEventDetails.indexOf(", ")) : "";
+
+	if (!eventCode) {
+		console.log("no event selected for guest registration");
+		document.getElementById("addGuestTitle").innerHTML = "Please select an event before registering a guest";
+		document.getElementById("mainInstructions").innerHTML = `<span style="color:red; font-size:1em;">Please select an event before registering a guest</span>`;
+		return;
+	}
 
 	if (guestTitle.length > 0 && guestForename.length > 0 && guestSurname.length > 0 && guestPhone.length > 0) {
 		console.log("registering guest");
-		google.script.run.withSuccessHandler(addGuestSuccessHandler).addGuest(guestTitle, guestForename, guestSurname, guestPhone, selectedEventDetails.slice(0,7));
+		google.script.run.withSuccessHandler(addGuestSuccessHandler).addGuest(guestTitle, guestForename, guestSurname, guestPhone, eventCode);
 
 	} else {
 		console.log("fail");
@@ -1644,22 +1656,25 @@ function addGuestSuccessHandler(response) {
 	// add this new member to the regData table
 	regData.push([response.mnum.toString(), true, false, false]);
 	// add another row to the table
+	const registerAction = { ...thisReg, action: 'deregister' };
+	const checkAction = { ...thisReg, action: 'check' };
+	const zoomAction = { ...thisReg, action: 'zoom' };
 	newRow = `<tr id="row_${rowNumber}" style="color:black;">
                     <td>${thisReg.mnum}</td>
                     <td>${thisReg.memberTitle} ${thisReg.memberForename} ${thisReg.memberSurname}</td>
                     <td style="width:5em; text-align: center;">
                       <regbutton id="reg_btn_${rowNumber}" class="saveButton" 
-                  onclick="registerMemberFor({&quot;eventCode&quot;:&quot;${thisReg.eventCode}&quot;,&quot;mnum&quot;:${thisReg.mnum},&quot;memberTitle&quot;:&quot;dd&quot;,&quot;memberForename&quot;:&quot;gg&quot;,&quot;memberSurname&quot;:&quot;hh&quot;,&quot;memberRegistered&quot;:true,&quot;memberChecked&quot;:false,&quot;memberZoomed&quot;:false,&quot;rowId&quot;:&quot;row_${rowNumber}&quot;,&quot;regButtonId&quot;:&quot;reg_btn_${rowNumber}&quot;,&quot;checkButtonId&quot;:&quot;check_btn_${rowNumber}&quot;,&quot;zoomButtonId&quot;:&quot;zoom_btn_${rowNumber}&quot;,&quot;regIconId&quot;:&quot;reg_${rowNumber}&quot;,&quot;checkIconId&quot;:&quot;check_${rowNumber}&quot;,&quot;zoomIconId&quot;:&quot;zoom_${rowNumber}&quot;})"> 
+                  onclick='manageMemberFor(${JSON.stringify(registerAction)})'> 
                   <i class="material-icons md-40" id="reg_${rowNumber}" style="width:100%; height:auto; margin-left: auto; margin-right: auto;color:red;">how_to_reg</i></regbutton>
                     </td>
                     <td style="width:5em; text-align: center;">
                       <checkbutton id="check_btn_${rowNumber}" class="saveButton" 
-                  onclick="checkMemberFor({&quot;eventCode&quot;:&quot;${thisReg.eventCode}&quot;,&quot;mnum&quot;:${thisReg.mnum},&quot;memberTitle&quot;:&quot;dd&quot;,&quot;memberForename&quot;:&quot;gg&quot;,&quot;memberSurname&quot;:&quot;hh&quot;,&quot;memberRegistered&quot;:false,&quot;memberChecked&quot;:false,&quot;memberZoomed&quot;:false,&quot;rowId&quot;:&quot;row_${rowNumber}&quot;,&quot;regButtonId&quot;:&quot;reg_btn_${rowNumber}&quot;,&quot;checkButtonId&quot;:&quot;check_btn_${rowNumber}&quot;,&quot;zoomButtonId&quot;:&quot;zoom_btn_${rowNumber}&quot;,&quot;regIconId&quot;:&quot;reg_${rowNumber}&quot;,&quot;checkIconId&quot;:&quot;check_${rowNumber}&quot;,&quot;zoomIconId&quot;:&quot;zoom_${rowNumber}&quot;})">
+                  onclick='manageMemberFor(${JSON.stringify(checkAction)})'>
                   <i class="material-icons md-40" id="check_${rowNumber}" style="width:100%; height:auto; margin-left: auto; margin-right: auto; color:#a6a6a6;">psychology_alt</i></checkbutton>
                     </td>
                     <td style="width:5em; text-align: center;">
                       <zoombutton id="zoom_btn_${rowNumber}" class="saveButton" 
-                  onclick="zoomMemberFor({&quot;eventCode&quot;:&quot;${thisReg.eventCode}&quot;,&quot;mnum&quot;:${thisReg.mnum},&quot;memberTitle&quot;:&quot;dd&quot;,&quot;memberForename&quot;:&quot;gg&quot;,&quot;memberSurname&quot;:&quot;hh&quot;,&quot;memberRegistered&quot;:false,&quot;memberChecked&quot;:false,&quot;memberZoomed&quot;:false,&quot;rowId&quot;:&quot;row_${rowNumber}&quot;,&quot;regButtonId&quot;:&quot;reg_btn_${rowNumber}&quot;,&quot;checkButtonId&quot;:&quot;check_btn_${rowNumber}&quot;,&quot;zoomButtonId&quot;:&quot;zoom_btn_${rowNumber}&quot;,&quot;regIconId&quot;:&quot;reg_${rowNumber}&quot;,&quot;checkIconId&quot;:&quot;check_${rowNumber}&quot;,&quot;zoomIconId&quot;:&quot;zoom_${rowNumber}&quot;})">
+                  onclick='manageMemberFor(${JSON.stringify(zoomAction)})'>
                   <i class="material-icons md-40" id="zoom_${rowNumber}" style="width:100%; height:auto; margin-left: auto; margin-right: auto; color:#a6a6a6;">psychology_alt</i></zoombutton>
                     </td>
                   </tr>`;

@@ -4,7 +4,7 @@ function testCode() {
 
 function deleteregister() {
   var scriptProperties = PropertiesService.getScriptProperties();
-  scriptProperties.deleteProperty('registerEventIPM:039');
+  scriptProperties.deleteProperty('registerEventMM-Apr-');
 }
 
 
@@ -775,4 +775,9 @@ function uploadBeaconExtract(data, fileName) {
   Logger.log(ManageMemberDatabase.uploadFileToGoogleDrivev2023(data, fileName));
 
   return 'something';
+}
+
+function zzz(){
+  const a = 'MM-Apr-26-01, 30/04';
+  Logger.log(a.slice(0,a.indexOf(", ")));
 }
