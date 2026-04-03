@@ -14,13 +14,6 @@
         "serviceId": "admin",
         "version": "directory_v1"
       }
-    ],
-    "libraries": [
-      {
-        "userSymbol": "DocumentGoogleAppsScriptProjects",
-        "libraryId": "1jrJ0u6bAvIwNDM1v4dmra06jvCYGC0xhHmEGjIUo1_kT6ZsJ-HNBf8rv",
-        "version": "4"
-      }
     ]
   },
   "webapp": {

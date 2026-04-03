@@ -64,19 +64,36 @@ const VERSION_HISTORY = [
   ,
   {
     version: 80,
-    date: '2026-03-28 17:21',
+    date: '2026-03-28 17:53',
     machine: 'tom-HP-Pavilion-Laptop-16-af0xxx',
     changes: 'Fixed add guest'
   }
+  ,
+  {
+    version: 81,
+    date: '2026-04-03 12:09',
+    machine: 'tom-HP-Pavilion-Laptop-16-af0xxx',
+    changes: 'Synchronise VERSION.js tracking with existing live v80 deployment'
+  }
     // Add new entries above this line
 ];
+
+// Current deployed version
+const CURRENT_VERSION = VERSION_HISTORY[VERSION_HISTORY.length - 1];
 
 /**
  * Gets the current version number
  * @return {number} Current version number
  */
 function getCurrentVersion() {
-  return VERSION_HISTORY[0].version;
+  return CURRENT_VERSION.version;
+}
+
+/**
+ * Get current version info
+ */
+function getVersionInfo() {
+  return CURRENT_VERSION;
 }
 
 /**
@@ -85,4 +102,14 @@ function getCurrentVersion() {
  */
 function getVersionHistory() {
   return VERSION_HISTORY;
+}
+
+/**
+ * Log all version history
+ */
+function logVersionHistory() {
+  Logger.log('=== VERSION HISTORY ===');
+  VERSION_HISTORY.forEach(v => {
+    Logger.log(`v${v.version} [${v.date}] ${v.machine}: ${v.changes}`);
+  });
 }
