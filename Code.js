@@ -9,6 +9,11 @@ function doGet(e){
       template = HtmlService.createTemplateFromFile('clearStorage');
       return template.evaluate().setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
 
+  } else if (e.parameter.mode == 'desktop' || e.parameter.desktop == 'true') {
+
+      template = HtmlService.createTemplateFromFile('desktopRegister');
+      return template.evaluate().setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+
   } else {
 
       template = HtmlService.createTemplateFromFile('allHtml');
@@ -152,4 +157,3 @@ function logDeviceDetails(deviceDetailsStringified){
   return 'device details logged on server';
  
 }
-

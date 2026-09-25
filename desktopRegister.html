@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      color: #111;
+      background: #fff;
+    }
+
+    button, input, select {
+      font: inherit;
+    }
+
+    .login-panel {
+      margin: 4vw auto;
+      max-width: 420px;
+    }
+
+    .login-panel input {
+      box-sizing: border-box;
+      display: block;
+      width: 100%;
+      margin: 8px 0 16px;
+      padding: 8px;
+      border: 2px solid #005ab8;
+    }
+
+    .app-shell {
+      display: none;
+      padding: 16px 24px 24px;
+    }
+
+    .top-bar {
+      display: grid;
+      grid-template-columns: minmax(360px, 1fr) auto;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .toolbar select {
+      min-width: 420px;
+      max-width: 760px;
+      padding: 8px;
+      border: 2px solid #005ab8;
+    }
+
+    .toolbar input {
+      width: 320px;
+      padding: 8px;
+      border: 2px solid #005ab8;
+    }
+
+    .icon-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      border: 2px solid #005ab8;
+      border-radius: 4px;
+      background: #fff;
+      color: #005ab8;
+      cursor: pointer;
+    }
+
+    .status {
+      min-height: 32px;
+      font-weight: bold;
+      color: #005ab8;
+      text-align: right;
+    }
+
+    .event-title {
+      margin: 0 0 12px;
+      color: #005ab8;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .table-wrap {
+      height: calc(100vh - 150px);
+      overflow: auto;
+      border: 1px solid #005ab8;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 16px;
+    }
+
+    th, td {
+      border: 1px solid #005ab8;
+      padding: 8px 12px;
+    }
+
+    th {
+      position: sticky;
+      top: 0;
+      background: #eee;
+      text-align: left;
+      z-index: 1;
+    }
+
+    th.action-col, td.action-col {
+      width: 96px;
+      text-align: center;
+    }
+
+    .member-action {
+      border: none;
+      background: #fff;
+      color: #a6a6a6;
+      cursor: pointer;
+    }
+
+    .member-action.active {
+      color: red;
+      font-weight: bold;
+    }
+
+    .member-action .material-icons {
+      font-size: 32px;
+    }
+  </style>
+</head>
+<body onload="initDesktopPage()">
+  <section id="loginSection" class="login-panel">
+    <h1 style="color:#63c369;">Login</h1>
+    <label for="login_username">User Name</label>
+    <input type="text" id="login_username" placeholder="UserId" name="username">
+    <label for="login_password">Password</label>
+    <input type="password" id="login_password" name="password" placeholder="password">
+    <button id="loginbtn" onclick="login()">Login</button>
+    <p id="loginInstructions"></p>
+  </section>
+
+  <section id="mainSection" class="app-shell">
+    <div class="top-bar">
+      <div class="toolbar">
+        <select name="events" id="eventsList">
+          <?!= getEventListSelectHtml();?>
+        </select>
+        <button class="icon-button" onclick="updateTable()" title="Reload register">
+          <span class="material-icons">cloud_sync</span>
+        </button>
+        <input type="text" id="showMemberMatches" onkeyup="filterMemberTable()" placeholder="Search members">
+        <button class="icon-button" onclick="clearSearch()" title="Clear search">
+          <span class="material-icons">backspace</span>
+        </button>
+      </div>
+      <div id="mainInstructions" class="status"></div>
+    </div>
+
+    <div id="eventRegisterFor" class="event-title">Please select an event</div>
+    <div class="table-wrap">
+      <table id="membersTable">
+        <thead>
+          <tr>
+            <th>MNUM</th>
+            <th>Name</th>
+            <th class="action-col">Register</th>
+            <th class="action-col">Check</th>
+            <th class="action-col">Zoom</th>
+          </tr>
+        </thead>
+        <tbody id="memberTableBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <script>
+    var sessionId = null;
+    var selectedEventDetails = "";
+    var regData = [];
+    var numAttendees = 0;
+    var filterText = "";
+    var clearSearchAfterActionTimer;
+    const CLEAR_SEARCH_AFTER_ACTION_MS = 4000;
+
+    function loginKeyHandler(e) {
+      if (e.key === "Enter") {
+        login();
+      }
+    }
+
+    function initDesktopPage() {
+      document.getElementById("login_username").addEventListener("keydown", loginKeyHandler);
+      document.getElementById("login_password").addEventListener("keydown", loginKeyHandler);
+      document.getElementById("eventsList").addEventListener("change", function() {
+        selectedEventDetails = document.getElementById("eventsList").value;
+        sessionStorage.selectedEventDetails = selectedEventDetails;
+        updateTable();
+      });
+
+      if (sessionStorage.sessionId) {
+        sessionId = sessionStorage.sessionId;
+        showMainSection();
+      }
+    }
+
+    function login() {
+      const username = document.getElementById("login_username").value;
+      const password = document.getElementById("login_password").value;
+      const loginInstructions = document.getElementById("loginInstructions");
+      loginInstructions.innerHTML = "starting check";
+
+      if (username.length === 0 || password.length === 0) {
+        loginInstructions.innerHTML = "you must supply both a username and password";
+        return;
+      }
+
+      google.script.run.withSuccessHandler(responseHandlerCheckUserGetSessionId)
+        .checkUserGetSessionId(username, password, window.innerWidth, window.innerHeight);
+    }
+
+    function responseHandlerCheckUserGetSessionId(response) {
+      if (!response.valid) {
+        document.getElementById("loginInstructions").innerHTML = "Invalid username or password, please try again";
+        return;
+      }
+
+      sessionStorage.sessionId = response.sessionId.toString();
+      sessionStorage.userName = response.userName;
+      sessionId = sessionStorage.sessionId;
+      showMainSection();
+    }
+
+    function showMainSection() {
+      document.getElementById("loginSection").style.display = "none";
+      document.getElementById("mainSection").style.display = "block";
+      if (sessionStorage.selectedEventDetails) {
+        selectedEventDetails = sessionStorage.selectedEventDetails;
+        document.getElementById("eventsList").value = selectedEventDetails;
+        updateTable();
+      }
+    }
+
+    function updateTable() {
+      selectedEventDetails = document.getElementById("eventsList").value;
+      if (!selectedEventDetails) {
+        setStatus("No event specified, please select an event", true);
+        return;
+      }
+
+      setStatus("Getting the register from the server");
+      const data = [sessionId, selectedEventDetails.slice(0, selectedEventDetails.indexOf(","))];
+      google.script.run.withSuccessHandler(makeTable).getRegisteredMembersData(JSON.stringify(data));
+    }
+
+    function makeTable(response) {
+      if (response.sessionIdOk !== "validSessionId") {
+        setStatus("Session expired or event unavailable. Please refresh and log in again.", true);
+        return;
+      }
+
+      regData = [];
+      numAttendees = 0;
+      selectedEventDetails = document.getElementById("eventsList").value;
+      sessionStorage.selectedEventDetails = selectedEventDetails;
+
+      const tbody = document.getElementById("memberTableBody");
+      tbody.innerHTML = "";
+
+      response.memberRegister.forEach(function(row, index) {
+        const rowId = "desktop_row_" + index.toString().padStart(4, "0");
+        const thisReg = {
+          eventCode: response.eventCode,
+          sessionId: sessionId,
+          mnum: row[0],
+          memberTitle: row[1],
+          memberForename: row[3],
+          memberSurname: row[4],
+          memberRegistered: row[5],
+          memberChecked: row[6],
+          memberZoomed: row[7],
+          rowId: rowId
+        };
+
+        if (thisReg.memberRegistered) {
+          numAttendees++;
+        }
+        regData.push([thisReg.mnum.toString(), thisReg.memberRegistered, thisReg.memberChecked, thisReg.memberZoomed]);
+
+        const tr = document.createElement("tr");
+        tr.id = rowId;
+        tr.innerHTML = `
+          <td>${formatMnum(thisReg.mnum)}</td>
+          <td>${escapeHtml([thisReg.memberTitle, thisReg.memberForename, thisReg.memberSurname].join(" "))}</td>
+          <td class="action-col">${actionButtonHtml(thisReg, "register")}</td>
+          <td class="action-col">${actionButtonHtml(thisReg, "check")}</td>
+          <td class="action-col">${actionButtonHtml(thisReg, "zoom")}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      document.getElementById("eventRegisterFor").innerHTML = selectedEventDetails + ", " + numAttendees + " in person";
+      setStatus("Register loaded / synchronised");
+      filterMemberTable();
+    }
+
+    function actionButtonHtml(data, actionType) {
+      let action;
+      let active;
+      let icon;
+
+      if (actionType === "register") {
+        action = data.memberRegistered ? "deregister" : "register";
+        active = data.memberRegistered;
+        icon = active ? "how_to_reg" : "psychology_alt";
+      } else if (actionType === "check") {
+        action = data.memberChecked ? "uncheck" : "check";
+        active = data.memberChecked;
+        icon = active ? "how_to_reg" : "psychology_alt";
+      } else {
+        action = data.memberZoomed ? "dezoom" : "zoom";
+        active = data.memberZoomed;
+        icon = active ? "videocam" : "psychology_alt";
+      }
+
+      const actionData = Object.assign({}, data, { action: action });
+      return `<button class="member-action ${active ? "active" : ""}" data-member-action="${encodeMemberAction(actionData)}">
+        <span class="material-icons">${icon}</span>
+      </button>`;
+    }
+
+    document.addEventListener("click", function(event) {
+      const button = event.target.closest("[data-member-action]");
+      if (!button) {
+        return;
+      }
+      manageMemberFor(decodeMemberAction(button.dataset.memberAction));
+    });
+
+    function manageMemberFor(data) {
+      const currentStatus = getStatus(data.mnum.toString());
+      const memberName = [data.memberTitle, data.memberForename, data.memberSurname].join(" ");
+
+      if (!currentStatus) {
+        setStatus("Could not find current status for " + memberName, true);
+        return;
+      }
+
+      data.memberRegistered = currentStatus[1];
+      data.memberChecked = currentStatus[2];
+      data.memberZoomed = currentStatus[3];
+
+      if (data.action === "register" && data.memberZoomed) {
+        setStatus("Already registered as Zoom attendee", true);
+        return;
+      }
+      if (data.action === "deregister" && data.memberChecked) {
+        setStatus("Uncheck member then retry", true);
+        return;
+      }
+      if (data.action === "check" && !data.memberRegistered) {
+        setStatus("Not registered as present In Person so cannot be checked", true);
+        return;
+      }
+      if ((data.action === "check" || data.action === "uncheck") && data.memberZoomed) {
+        setStatus("Member is zoomed", true);
+        return;
+      }
+      if (data.action === "zoom" && data.memberRegistered) {
+        setStatus("Already registered as In Person attendee", true);
+        return;
+      }
+
+      if (data.action === "register") {
+        data.memberRegistered = true;
+      } else if (data.action === "deregister") {
+        data.memberRegistered = false;
+      } else if (data.action === "check") {
+        data.memberChecked = true;
+      } else if (data.action === "uncheck") {
+        data.memberChecked = false;
+      } else if (data.action === "zoom") {
+        data.memberZoomed = true;
+      } else if (data.action === "dezoom") {
+        data.memberZoomed = false;
+      }
+
+      setStatus("Updating " + memberName);
+      updateLocalStatus(data);
+      updateRow(data);
+      google.script.run.withSuccessHandler(nextReg).manageMemberFor(data);
+    }
+
+    function nextReg(response) {
+      setStatus(response.status);
+      filterText = document.getElementById("showMemberMatches").value;
+      numAttendees = response.numAttendees;
+      document.getElementById("eventRegisterFor").innerHTML = selectedEventDetails + ", " + numAttendees + " in person";
+      clearTimeout(clearSearchAfterActionTimer);
+      clearSearchAfterActionTimer = setTimeout(function() {
+        if (document.getElementById("showMemberMatches").value === filterText) {
+          clearSearch();
+        }
+      }, CLEAR_SEARCH_AFTER_ACTION_MS);
+    }
+
+    function updateLocalStatus(data) {
+      for (var i = 0; i < regData.length; i++) {
+        if (regData[i][0].toString() === data.mnum.toString()) {
+          regData[i][1] = data.memberRegistered;
+          regData[i][2] = data.memberChecked;
+          regData[i][3] = data.memberZoomed;
+          return;
+        }
+      }
+    }
+
+    function updateRow(data) {
+      const row = document.getElementById(data.rowId);
+      if (!row) {
+        return;
+      }
+      row.children[2].innerHTML = actionButtonHtml(data, "register");
+      row.children[3].innerHTML = actionButtonHtml(data, "check");
+      row.children[4].innerHTML = actionButtonHtml(data, "zoom");
+    }
+
+    function filterMemberTable() {
+      const filter = document.getElementById("showMemberMatches").value.toUpperCase();
+      const rows = document.querySelectorAll("#memberTableBody tr");
+      rows.forEach(function(row) {
+        row.style.display = row.innerText.toUpperCase().indexOf(filter) > -1 ? "" : "none";
+      });
+    }
+
+    function clearSearch() {
+      document.getElementById("showMemberMatches").value = "";
+      filterMemberTable();
+    }
+
+    function getStatus(mnum) {
+      return regData.filter(function(row) {
+        return row[0].toString() === mnum.toString();
+      })[0];
+    }
+
+    function encodeMemberAction(data) {
+      return encodeURIComponent(JSON.stringify(data));
+    }
+
+    function decodeMemberAction(encodedData) {
+      return JSON.parse(decodeURIComponent(encodedData));
+    }
+
+    function formatMnum(mnum) {
+      let value = mnum.toString().padStart(3, "0");
+      if (value.length > 4) {
+        value = value.slice(0, 4) + "-";
+      }
+      return value;
+    }
+
+    function setStatus(message, isError) {
+      const status = document.getElementById("mainInstructions");
+      status.innerHTML = escapeHtml(message || "");
+      status.style.color = isError ? "red" : "#005ab8";
+    }
+
+    function escapeHtml(value) {
+      return value.toString()
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+  </script>
+</body>
+</html>
