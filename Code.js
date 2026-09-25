@@ -9,14 +9,14 @@ function doGet(e){
       template = HtmlService.createTemplateFromFile('clearStorage');
       return template.evaluate().setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
 
-  } else if (e.parameter.mode == 'desktop' || e.parameter.desktop == 'true') {
+  } else if (e.parameter.mode == 'mobile' || e.parameter.mobile == 'true') {
 
-      template = HtmlService.createTemplateFromFile('desktopRegister');
+      template = HtmlService.createTemplateFromFile('allHtml');
       return template.evaluate().setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
 
   } else {
 
-      template = HtmlService.createTemplateFromFile('allHtml');
+      template = HtmlService.createTemplateFromFile('desktopRegister');
       return template.evaluate().setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
   }
 
