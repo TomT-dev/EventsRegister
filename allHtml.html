@@ -94,6 +94,39 @@ body {
     flex-direction: column;
     align-items: center;
 	}
+
+  body.pc-mode #leftSide {
+    width: 0% !important;
+  }
+
+  body.pc-mode #rightSide {
+    width: 100% !important;
+    align-items: stretch;
+  }
+
+  body.pc-mode #topBox,
+  body.pc-mode #rightArea,
+  body.pc-mode #rightArea2 {
+    width: 100%;
+  }
+
+  body.pc-mode #rightArea > div,
+  body.pc-mode #rightArea2 > div {
+    margin-left: 2vw !important;
+    margin-right: 2vw !important;
+  }
+
+  body.pc-mode #eventsList {
+    width: 70vw !important;
+  }
+
+  body.pc-mode #showMemberMatches {
+    width: 65vw !important;
+  }
+
+  body.pc-mode .tableFixHead {
+    height: calc(100vh - 260px);
+  }
 	
 	.centered {
 		position: absolute;
@@ -692,7 +725,10 @@ document.addEventListener('DOMContentLoaded', enableLoginEnter);
         <div id="topBox">
           <div class="instructions-grid-container">
             <div class="grid-item.ip">
-              <button id="showKbd" onclick="showKeyboard(false)" style="border-radius: 4px; align:left;  border:none; background-color:white; outline: none;"><i class="material-icons nav" id="showKbdIcon" style="width:100%; height:auto; color:#005ab8; "><span class="material-icons">chevron_left</span></i></button>
+              <button id="showKbd" onclick="showKeyboard(false)" style="border-radius: 4px; align:left;  border:none; background-color:white; outline: none;"><i class="material-icons nav" id="showKbdIcon" style="width:100%; height:auto; color:#005ab8; "><span class="material-icons">keyboard_hide</span></i></button>
+            </div>
+            <div class="grid-item.ip">
+              <button id="toggleRegisterLayout" onclick="toggleRegisterLayoutMode()" style="border-radius: 4px; align:left; border:none; background-color:white; outline: none;"><i class="material-icons nav" id="registerLayoutIcon" style="width:100%; height:auto; color:#005ab8;"><span class="material-icons">fullscreen</span></i></button>
             </div>
             <div class="grid-item.ip">
               <p id="mainInstructions" style="color:#005ab8; font-weight:bold; font-size:1vw; height:1vw; margin-left:.5vw;"></p>
@@ -827,6 +863,7 @@ var currentMessage,currentMessageColour;
 var landscapeLeftSideWidth,landscapeRightSideWidth,landscapeKeySize;
 var portraitLeftSideWidth, portraitRightSideWidth, portraitKeySize;
 var filterText;
+var registerLayoutMode = "tablet";
 
 
 
@@ -889,6 +926,7 @@ function initPage()  {
     detectDeviceType();
     retrieveSelectedEventDetails_FromSessionStorage();
     setScreenSplitAndKeySize();
+    applyRegisterLayoutMode(getSavedOrDefaultRegisterLayoutMode(), false);
     
     console.log(` window orientation ${screen.orientation.type}`);
    
@@ -1143,32 +1181,83 @@ function showTodaysEvents() {
 	
 }
 
-function showKeyboard(flag) { // used to show split or full screen
+function getSavedOrDefaultRegisterLayoutMode() {
+  const savedMode = localStorage.getItem("registerLayoutMode");
+  if (savedMode === "pc" || savedMode === "tablet") {
+    return savedMode;
+  }
+  return isDesktop() ? "pc" : "tablet";
+}
+
+function applyRegisterLayoutMode(mode, savePreference) {
+  registerLayoutMode = mode === "pc" ? "pc" : "tablet";
+  document.body.classList.toggle("pc-mode", registerLayoutMode === "pc");
+
+  if (savePreference) {
+    localStorage.setItem("registerLayoutMode", registerLayoutMode);
+  }
+
+  const layoutIconElement = document.getElementById("registerLayoutIcon");
+  if (layoutIconElement) {
+    layoutIconElement.innerHTML = registerLayoutMode === "pc" ? "view_column" : "fullscreen";
+  }
+
+  if (registerLayoutMode === "pc") {
+    document.getElementById("leftSide").style.width = "0%";
+    document.getElementById("rightSide").style.width = "100%";
+  } else {
+    setScreenSplitWidthsForCurrentOrientation();
+  }
+}
+
+function toggleRegisterLayoutMode() {
+  const nextMode = registerLayoutMode === "pc" ? "tablet" : "pc";
+  applyRegisterLayoutMode(nextMode, true);
+}
+
+function setScreenSplitWidthsForCurrentOrientation() {
+  if (localStorage.getItem("landscapeLeftSideWidth") == null) {
+    localStorage.setItem("landscapeLeftSideWidth", "50%");
+  }
+  if (localStorage.getItem("landscapeRightSideWidth") == null) {
+    localStorage.setItem("landscapeRightSideWidth", "50%");
+  }
+  if (localStorage.getItem("portraitLeftSideWidth") == null) {
+    localStorage.setItem("portraitLeftSideWidth", "50%");
+  }
+  if (localStorage.getItem("portraitRightSideWidth") == null) {
+    localStorage.setItem("portraitRightSideWidth", "50%");
+  }
+  const screenWidth = window.innerWidth;
+  const screenHeight = window.innerHeight;
+  if (screenWidth >= screenHeight) {
+    document.getElementById("leftSide").style.width = localStorage.landscapeLeftSideWidth;
+    document.getElementById("rightSide").style.width = localStorage.landscapeRightSideWidth;
+  } else {
+    document.getElementById("leftSide").style.width = localStorage.portraitLeftSideWidth;
+    document.getElementById("rightSide").style.width = localStorage.portraitRightSideWidth;
+  }
+}
+
+function showKeyboard(flag) {
 	console.log("%cshow kb called","color:blue; font-weight:bold; ");
 	//console.log(flag);
 
-	const leftSideElement = document.getElementById("leftSide");
-	const rightSideElement = document.getElementById("rightSide");
+	const virtualKeyboardElement = document.getElementById("VirtualKey");
+	const copiedTextElement = document.getElementById("copiedText");
 	const showKbdIconElement = document.getElementById("showKbdIcon");
 	const showKbdElement = document.getElementById("showKbd");
-	const screenWidth = window.innerWidth;
-	const screenHeight = window.innerHeight;
 
 	if (flag) {
-		if (screenWidth >= screenHeight) {
-			leftSideElement.style.width = localStorage.landscapeLeftSideWidth;
-			rightSideElement.style.width = localStorage.landscapeRightSideWidth;
-		} else {
-			leftSideElement.style.width = localStorage.portraitLeftSideWidth;
-			rightSideElement.style.width = localStorage.portraitRightSideWidth;
-		}
-		showKbdIconElement.innerHTML = "chevron_left";
+    virtualKeyboardElement.style.display = "block";
+    copiedTextElement.style.display = "inline-block";
+		showKbdIconElement.innerHTML = "keyboard_hide";
 		showKbdElement.setAttribute("onclick", "showKeyboard(false)");
     keyboardHidden = false;
 	} else {
-		leftSideElement.style.width = "0%";
-		rightSideElement.style.width = "100%";
-		showKbdIconElement.innerHTML = "navigate_next";
+    virtualKeyboardElement.style.display = "none";
+    copiedTextElement.style.display = "none";
+		showKbdIconElement.innerHTML = "keyboard";
 		showKbdElement.setAttribute("onclick", "showKeyboard(true)");
     keyboardHidden = true;
 	}
@@ -1767,6 +1856,9 @@ function resetTuning() {
 	localStorage.setItem("landscapeLeftSideWidth", leftSideWidth);
 	localStorage.setItem("landscapeRightSideWidth", rightSideWidth);
 	localStorage.setItem("landscapeKeySize", keySize);
+	localStorage.setItem("portraitLeftSideWidth", leftSideWidth);
+	localStorage.setItem("portraitRightSideWidth", rightSideWidth);
+	localStorage.setItem("portraitKeySize", keySize);
 	console.log(" all screen split and keyboard sizes reset to default");
 	document.getElementById("newKeySize").value = keySize;
 	document.getElementById("newSplit").value = parseInt(leftSideWidth.slice(0, 2));
@@ -1781,9 +1873,15 @@ function changeScreenSplit() {
   var screenWidth = window.innerWidth;
 	var screenHeight = window.innerHeight;
 
+  if (screenWidth >= screenHeight) {
     console.log("landscape orientation");
     localStorage.landscapeLeftSideWidth = leftSideWidth;
     localStorage.landscapeRightSideWidth = rightSideWidth;
+  } else {
+    console.log("portrait orientation");
+    localStorage.portraitLeftSideWidth = leftSideWidth;
+    localStorage.portraitRightSideWidth = rightSideWidth;
+  }
 
 
 }
@@ -1848,19 +1946,24 @@ function setScreenSplitAndKeySize() {
   // retrieve and split and key sizes saved for landscape mode
 
 
-  if (localStorage.getItem("landscapeLeftSideWidth") != null && localStorage.getItem("landscapeRightSideWidth") != null) {
-			thisLeftSideWidth = localStorage.getItem("landscapeLeftSideWidth");
-			thisRightSideWidth = localStorage.getItem("landscapeRightSideWidth");
+  const splitPrefix = screenWidth >= screenHeight ? "landscape" : "portrait";
+  const leftSplitKey = splitPrefix + "LeftSideWidth";
+  const rightSplitKey = splitPrefix + "RightSideWidth";
+  const keySizeKey = splitPrefix + "KeySize";
+
+  if (localStorage.getItem(leftSplitKey) != null && localStorage.getItem(rightSplitKey) != null) {
+			thisLeftSideWidth = localStorage.getItem(leftSplitKey);
+			thisRightSideWidth = localStorage.getItem(rightSplitKey);
 		} else {
-      localStorage.landscapeLeftSideWidth = thisLeftSideWidth;
-      localStorage.landscapeRightSideWidth = thisRightSideWidth;
+      localStorage.setItem(leftSplitKey, thisLeftSideWidth);
+      localStorage.setItem(rightSplitKey, thisRightSideWidth);
     }
 	
-  if (localStorage.getItem("landscapeKeySize") != null) {
-			thisKeySize = localStorage.getItem("landscapeKeySize");
+  if (localStorage.getItem(keySizeKey) != null) {
+			thisKeySize = localStorage.getItem(keySizeKey);
       thisTextSize = thisKeySize / 2;
 		} else {
-      localStorage.landscapeKeySize = thisKeySize;
+      localStorage.setItem(keySizeKey, thisKeySize);
     }
 
 
@@ -1899,6 +2002,9 @@ function setScreenSplitAndKeySize() {
   //change the search box copy width    
    document.getElementById("copiedText").style.width = searchBarWidth;
 
+  if (registerLayoutMode === "pc") {
+    applyRegisterLayoutMode("pc", false);
+  }
 
 }
 
