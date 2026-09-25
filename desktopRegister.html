@@ -525,8 +525,12 @@
     function filterMemberTable() {
       const filter = document.getElementById("showMemberMatches").value.toUpperCase();
       const rows = document.querySelectorAll("#memberTableBody tr");
-      rows.forEach(function(row) {
-        row.style.display = row.innerText.toUpperCase().indexOf(filter) > -1 ? "" : "none";
+      rows.forEach(function(row, index) {
+        const matchesSearch = row.innerText.toUpperCase().indexOf(filter) > -1;
+        const memberStatus = regData[index];
+        const isAttending = memberStatus && (memberStatus[1] || memberStatus[2] || memberStatus[3]);
+        const matchesAttendance = !hideNonAttendees || isAttending;
+        row.style.display = matchesSearch && matchesAttendance ? "" : "none";
       });
     }
 
@@ -536,10 +540,8 @@
     }
 
     function toggleShowMembers() {
-      const searchElement = document.getElementById("showMemberMatches");
       const iconElement = document.getElementById("toggleShowMembersIcon");
       hideNonAttendees = !hideNonAttendees;
-      searchElement.value = hideNonAttendees ? ":true" : "";
       iconElement.innerHTML = hideNonAttendees ? "expand_more" : "expand_less";
       filterMemberTable();
     }
