@@ -431,9 +431,10 @@ function UNUSEDmakeTable(response) {
     Logger.log(thisReg);
 
 
+    var memberAction = encodeURIComponent(JSON.stringify(thisReg));
     part1 = `<button id="showbtn" 
                 class= "saveButton" 
-                onclick=registerMemberFor(${JSON.stringify(thisReg)})>
+                onclick='registerMemberFor(JSON.parse(decodeURIComponent("${memberAction}")))'>
                 <i class="material-icons md-40" style="width:100%; height:auto; padding-left: 1.1vw;color:`;
 
     part2 = `;">`;

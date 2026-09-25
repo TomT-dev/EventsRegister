@@ -1412,42 +1412,42 @@ function makeTable(response) {
           mnum = mnum.slice(0, 4) + '-';
         }
         if (data[index][5]) {
-          thisReg.action = 'deregister';
+          const regAction = { ...thisReg, action: 'deregister' };
           regLink = `<regButton id= "${regButtonId}" 
                           class= "saveButton" 
-                          onclick=manageMemberFor(${JSON.stringify(thisReg)})>
+                          data-member-action="${encodeMemberAction(regAction)}">
                           <i class="material-icons md-40" id = "${regIconId}" style="width:100%; height:auto; margin-left: auto; margin-right: auto; color:red; font-weight: bold; ">how_to_reg</i></button>`;
         } else {
-          thisReg.action = 'register';
+          const regAction = { ...thisReg, action: 'register' };
           regLink = `<regButton id= "${regButtonId}" 
                           class= "saveButton" 
-                          onclick=manageMemberFor(${JSON.stringify(thisReg)})>
+                          data-member-action="${encodeMemberAction(regAction)}">
                           <i class="material-icons md-40" id = "${regIconId}" style="width:100%; height:auto; margin-left: auto; margin-right: auto;color:#a6a6a6;">psychology_alt</i></button>`;
         }
         if (data[index][6]) {
-          thisReg.action = 'uncheck';
+          const checkAction = { ...thisReg, action: 'uncheck' };
           checkLink = `<checkButton id= "${checkButtonId}" 
                           class= "saveButton" 
-                          onclick= manageMemberFor(${JSON.stringify(thisReg)})>
+                          data-member-action="${encodeMemberAction(checkAction)}">
                           <i class="material-icons md-40" id = "${checkIconId}" style="width:100%; height:auto; margin-left: auto; margin-right: auto; color:red;">how_to_reg</i></button>`;
         } else {
-          thisReg.action = 'check';
+          const checkAction = { ...thisReg, action: 'check' };
           checkLink = `<checkButton id= "${checkButtonId}" 
                           class= "saveButton" 
-                          onclick=manageMemberFor(${JSON.stringify(thisReg)})>
+                          data-member-action="${encodeMemberAction(checkAction)}">
                           <i class="material-icons md-40" id = "${checkIconId}" style="width:100%; height:auto; margin-left: auto; margin-right: auto; color:#a6a6a6;">psychology_alt</i></button>`;
         }
         if (data[index][7]) {
-          thisReg.action = 'dezoom';
+          const zoomAction = { ...thisReg, action: 'dezoom' };
           zoomLink = `<zoomButton id= "${zoomButtonId}" 
                           class= "saveButton" 
-                          onclick= manageMemberFor(${JSON.stringify(thisReg)})>
+                          data-member-action="${encodeMemberAction(zoomAction)}">
                           <i class="material-icons md-40" id = "${zoomIconId}" style="width:100%; height:auto; margin-left: auto; margin-right: auto; color:red;">videocam</i></button>`;
         } else {
-          thisReg.action = 'zoom';
+          const zoomAction = { ...thisReg, action: 'zoom' };
           zoomLink = `<zoomButton id= "${zoomButtonId}" 
                           class= "saveButton" 
-                          onclick=manageMemberFor(${JSON.stringify(thisReg)})>
+                          data-member-action="${encodeMemberAction(zoomAction)}">
                           <i class="material-icons md-40" id = "${zoomIconId}" style="width:100%; height:auto; margin-left: auto; margin-right: auto; color:#a6a6a6;">psychology_alt</i></button>`;
         }
         if (index == 0) {
@@ -1664,17 +1664,17 @@ function addGuestSuccessHandler(response) {
                     <td>${thisReg.memberTitle} ${thisReg.memberForename} ${thisReg.memberSurname}</td>
                     <td style="width:5em; text-align: center;">
                       <regbutton id="reg_btn_${rowNumber}" class="saveButton" 
-                  onclick='manageMemberFor(${JSON.stringify(registerAction)})'> 
+                  data-member-action="${encodeMemberAction(registerAction)}">
                   <i class="material-icons md-40" id="reg_${rowNumber}" style="width:100%; height:auto; margin-left: auto; margin-right: auto;color:red;">how_to_reg</i></regbutton>
                     </td>
                     <td style="width:5em; text-align: center;">
                       <checkbutton id="check_btn_${rowNumber}" class="saveButton" 
-                  onclick='manageMemberFor(${JSON.stringify(checkAction)})'>
+                  data-member-action="${encodeMemberAction(checkAction)}">
                   <i class="material-icons md-40" id="check_${rowNumber}" style="width:100%; height:auto; margin-left: auto; margin-right: auto; color:#a6a6a6;">psychology_alt</i></checkbutton>
                     </td>
                     <td style="width:5em; text-align: center;">
                       <zoombutton id="zoom_btn_${rowNumber}" class="saveButton" 
-                  onclick='manageMemberFor(${JSON.stringify(zoomAction)})'>
+                  data-member-action="${encodeMemberAction(zoomAction)}">
                   <i class="material-icons md-40" id="zoom_${rowNumber}" style="width:100%; height:auto; margin-left: auto; margin-right: auto; color:#a6a6a6;">psychology_alt</i></zoombutton>
                     </td>
                   </tr>`;
@@ -2304,6 +2304,22 @@ function isLocalStorageKey(value){
         filterMemberTable();
       }
 
+      function encodeMemberAction(data) {
+        return encodeURIComponent(JSON.stringify(data));
+      }
+
+      function decodeMemberAction(encodedData) {
+        return JSON.parse(decodeURIComponent(encodedData));
+      }
+
+      document.addEventListener("click", function(event) {
+        const actionElement = event.target.closest("[data-member-action]");
+        if (!actionElement) {
+          return;
+        }
+        manageMemberFor(decodeMemberAction(actionElement.dataset.memberAction));
+      });
+
       function manageMemberFor(data) {
 
       console.log("%cmanage member called","color:blue; font-weight:bold; ");
@@ -2452,8 +2468,7 @@ function isLocalStorageKey(value){
       iconElement.style.color = "pink";
       iconElement.style.fontWeight = "normal";
     }   
-    var params = "manageMemberFor(" + JSON.stringify(data) + ")";
-    document.getElementById(`${buttonId}`).setAttribute("onclick", params);
+    document.getElementById(`${buttonId}`).dataset.memberAction = encodeMemberAction(data);
 		google.script.run.withSuccessHandler(nextReg).manageMemberFor(data);
 	}
 
