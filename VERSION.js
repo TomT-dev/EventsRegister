@@ -75,6 +75,13 @@ const VERSION_HISTORY = [
     machine: 'tom-HP-Pavilion-Laptop-16-af0xxx',
     changes: 'Synchronise VERSION.js tracking with existing live v80 deployment'
   }
+  ,
+  {
+    version: 82,
+    date: '2026-09-25 07:52',
+    machine: 'tom-HP-Pavilion-Laptop-16-af0xxx',
+    changes: 'Fix member action handling for multi-part names and delay search reset after member action'
+  }
     // Add new entries above this line
 ];
 
