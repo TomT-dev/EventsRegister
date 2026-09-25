@@ -58,6 +58,43 @@
       border: 2px solid #005ab8;
     }
 
+    .panel {
+      display: none;
+      margin: 12px 0;
+      padding: 12px;
+      border: 1px solid #005ab8;
+      background: #f7fbff;
+    }
+
+    .panel h2 {
+      margin: 0 0 10px;
+      color: #005ab8;
+      font-size: 18px;
+    }
+
+    .panel-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .panel input {
+      width: 220px;
+      padding: 8px;
+      border: 2px solid #005ab8;
+    }
+
+    .text-button {
+      min-height: 40px;
+      padding: 8px 12px;
+      border: 2px solid #005ab8;
+      border-radius: 4px;
+      background: #fff;
+      color: #005ab8;
+      cursor: pointer;
+    }
+
     .icon-button {
       display: inline-flex;
       align-items: center;
@@ -153,12 +190,47 @@
         <button class="icon-button" onclick="updateTable()" title="Reload register">
           <span class="material-icons">cloud_sync</span>
         </button>
+        <button class="icon-button" onclick="toggleShowMembers()" title="Show/hide non-attendees">
+          <span class="material-icons" id="toggleShowMembersIcon">expand_less</span>
+        </button>
+        <button class="icon-button" onclick="addGuest()" title="Register a guest">
+          <span class="material-icons">person_add</span>
+        </button>
+        <button class="icon-button" onclick="emailReg()" title="Email register">
+          <span class="material-icons">mail</span>
+        </button>
+        <button class="icon-button" onclick="toggleOpenMode()" title="Switch today/all events">
+          <span class="material-icons" id="showTodayIcon">today</span>
+        </button>
+        <button class="icon-button" onclick="showUpdateOptions()" title="Update options">
+          <span class="material-icons">sync</span>
+        </button>
         <input type="text" id="showMemberMatches" onkeyup="filterMemberTable()" placeholder="Search members">
         <button class="icon-button" onclick="clearSearch()" title="Clear search">
           <span class="material-icons">backspace</span>
         </button>
       </div>
       <div id="mainInstructions" class="status"></div>
+    </div>
+
+    <div id="addGuestSection" class="panel">
+      <h2 id="addGuestTitle">Register a guest</h2>
+      <div class="panel-row">
+        <input type="text" id="guestTitle" placeholder="Title">
+        <input type="text" id="guestForename" placeholder="Forename">
+        <input type="text" id="guestSurname" placeholder="Surname">
+        <input type="text" id="guestPhone" placeholder="Contact number">
+        <button class="text-button" onclick="registerGuest()">Register guest</button>
+      </div>
+    </div>
+
+    <div id="updateMembersSection" class="panel">
+      <h2>Update options</h2>
+      <div class="panel-row">
+        <button class="text-button" onclick="updateTable()">Reload current register from server</button>
+        <button class="text-button" onclick="refreshMembers()">Update list with new members</button>
+      </div>
+      <p id="uploadStatus"></p>
     </div>
 
     <div id="eventRegisterFor" class="event-title">Please select an event</div>
@@ -184,6 +256,8 @@
     var regData = [];
     var numAttendees = 0;
     var filterText = "";
+    var hideNonAttendees = false;
+    var showAddGuest = false;
     var clearSearchAfterActionTimer;
     const CLEAR_SEARCH_AFTER_ACTION_MS = 4000;
 
@@ -201,6 +275,11 @@
         sessionStorage.selectedEventDetails = selectedEventDetails;
         updateTable();
       });
+      if (!localStorage.openWithTodaysEvent) {
+        localStorage.openWithTodaysEvent = "allEvents";
+      }
+      updateTodayToggleIcon();
+      applyEventModeToOptions();
 
       if (sessionStorage.sessionId) {
         sessionId = sessionStorage.sessionId;
@@ -243,6 +322,20 @@
         document.getElementById("eventsList").value = selectedEventDetails;
         updateTable();
       }
+    }
+
+    function loadRegisterWithStatus(message) {
+      const eventCode = selectedEventDetails ? selectedEventDetails.slice(0, selectedEventDetails.indexOf(",")) : "";
+      if (!eventCode) {
+        return;
+      }
+      const data = [sessionId, eventCode];
+      google.script.run.withSuccessHandler(function(response) {
+        makeTable(response);
+        if (message) {
+          setStatus(message);
+        }
+      }).getRegisteredMembersData(JSON.stringify(data));
     }
 
     function updateTable() {
@@ -440,6 +533,138 @@
     function clearSearch() {
       document.getElementById("showMemberMatches").value = "";
       filterMemberTable();
+    }
+
+    function toggleShowMembers() {
+      const searchElement = document.getElementById("showMemberMatches");
+      const iconElement = document.getElementById("toggleShowMembersIcon");
+      hideNonAttendees = !hideNonAttendees;
+      searchElement.value = hideNonAttendees ? ":true" : "";
+      iconElement.innerHTML = hideNonAttendees ? "expand_more" : "expand_less";
+      filterMemberTable();
+    }
+
+    function addGuest() {
+      if (!selectedEventDetails) {
+        setStatus("Please select an event before adding a guest", true);
+        return;
+      }
+      showAddGuest = !showAddGuest;
+      document.getElementById("addGuestSection").style.display = showAddGuest ? "block" : "none";
+    }
+
+    function registerGuest() {
+      const guestTitle = document.getElementById("guestTitle").value;
+      const guestForename = document.getElementById("guestForename").value;
+      const guestSurname = document.getElementById("guestSurname").value;
+      const guestPhone = document.getElementById("guestPhone").value;
+      const eventCode = selectedEventDetails ? selectedEventDetails.slice(0, selectedEventDetails.indexOf(",")) : "";
+
+      if (!eventCode) {
+        setStatus("Please select an event before registering a guest", true);
+        return;
+      }
+
+      if (!guestTitle || !guestForename || !guestSurname || !guestPhone) {
+        document.getElementById("addGuestTitle").innerHTML = "You must complete all fields";
+        return;
+      }
+
+      setStatus("Registering guest");
+      google.script.run.withSuccessHandler(addGuestSuccessHandler)
+        .addGuest(guestTitle, guestForename, guestSurname, guestPhone, eventCode);
+    }
+
+    function addGuestSuccessHandler(response) {
+      document.getElementById("guestTitle").value = "";
+      document.getElementById("guestForename").value = "";
+      document.getElementById("guestSurname").value = "";
+      document.getElementById("guestPhone").value = "";
+      document.getElementById("addGuestTitle").innerHTML = "Register a guest";
+      showAddGuest = true;
+      addGuest();
+      loadRegisterWithStatus([response.title, response.forename, response.surname].join(" ") + " has been added to the register");
+    }
+
+    function emailReg() {
+      if (!selectedEventDetails) {
+        setStatus("No event selected, please select an event and try again", true);
+        return;
+      }
+      setStatus("Request sent to email register to committee members - please wait for a response");
+      google.script.run.withSuccessHandler(responseHandlerEmailReg).emailRegisterFor(selectedEventDetails);
+    }
+
+    function responseHandlerEmailReg(response) {
+      setStatus(response);
+    }
+
+    function showUpdateOptions() {
+      const updateMembersSection = document.getElementById("updateMembersSection");
+      updateMembersSection.style.display = updateMembersSection.style.display === "block" ? "none" : "block";
+    }
+
+    function refreshMembers() {
+      const eventData = document.getElementById("eventsList").value;
+      const eventCode = eventData ? eventData.slice(0, eventData.indexOf(",")) : "";
+      if (!eventCode) {
+        setStatus("No event selected - select an event, then retry update members", true);
+        return;
+      }
+      if (!confirm("This will update the register for " + eventData + " to include any new members downloaded from Beacon. Do you want to continue?")) {
+        return;
+      }
+      document.getElementById("uploadStatus").innerHTML = "Updating members...";
+      google.script.run.withSuccessHandler(refreshMembersHandler).updateMembersInThisRegister(eventCode);
+    }
+
+    function refreshMembersHandler(response) {
+      document.getElementById("uploadStatus").innerHTML = escapeHtml(response.msg || "");
+      response.sessionIdOk = "validSessionId";
+      response.sessionId = sessionId;
+      if (response.updated) {
+        makeTable(response);
+      }
+    }
+
+    function toggleOpenMode() {
+      localStorage.openWithTodaysEvent = localStorage.openWithTodaysEvent === "allEvents" ? "todaysEvents" : "allEvents";
+      updateTodayToggleIcon();
+      applyEventModeToOptions();
+      selectedEventDetails = "";
+      sessionStorage.removeItem("selectedEventDetails");
+      document.getElementById("eventsList").selectedIndex = 0;
+      document.getElementById("memberTableBody").innerHTML = "";
+      document.getElementById("eventRegisterFor").innerHTML = "Please select an event";
+      setStatus(localStorage.openWithTodaysEvent === "todaysEvents" ? "Today mode selected" : "All events mode selected");
+    }
+
+    function applyEventModeToOptions() {
+      const showTodayOnly = localStorage.openWithTodaysEvent === "todaysEvents";
+      const today = getTodayDateString();
+      const options = document.querySelectorAll("#eventsList option");
+      options.forEach(function(option) {
+        if (!option.value) {
+          option.hidden = false;
+          return;
+        }
+        const isToday = option.textContent.indexOf(today) > -1;
+        option.hidden = showTodayOnly && !isToday;
+      });
+    }
+
+    function getTodayDateString() {
+      const d = new Date();
+      return d.getDate().toString().padStart(2, "0") + "/" +
+        (d.getMonth() + 1).toString().padStart(2, "0") + "/" +
+        d.getFullYear();
+    }
+
+    function updateTodayToggleIcon() {
+      const iconElement = document.getElementById("showTodayIcon");
+      if (iconElement) {
+        iconElement.innerHTML = localStorage.openWithTodaysEvent === "todaysEvents" ? "calendar_month" : "today";
+      }
     }
 
     function getStatus(mnum) {
