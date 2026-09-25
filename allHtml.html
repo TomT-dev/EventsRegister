@@ -1254,19 +1254,28 @@ function refreshTable(response) {
 	makeTable(response);
 }
 
+var clearSearchAfterActionTimer;
+const CLEAR_SEARCH_AFTER_ACTION_MS = 4000;
+
 function nextReg(response) {
   console.log("%cnextReg called","color:blue; font-weight:bold; ");
 	console.log(response);
-	document.getElementById("mainInstructions").innerHTML = response.status;
-  document.getElementById("mainInstructions").style.color = "#005ab8";
+  const instructions = document.getElementById("mainInstructions");
+  instructions.innerHTML = `<span style="color:#005ab8; font-size:1.4em;">${response.status}</span>`;
+  instructions.style.color = "#005ab8";
   filterText = document.getElementById("showMemberMatches").value;
   console.log("filtertext = " + filterText);
-	document.getElementById("showMemberMatches").value = "";
-  document.getElementById("copiedText").value = "";
 	numAttendees = response.numAttendees;
 	document.getElementById("eventRegisterFor").innerHTML = selectedEventDetails + ", " + numAttendees + " in person";
-  // 
 	filterMemberTable();
+  clearTimeout(clearSearchAfterActionTimer);
+  clearSearchAfterActionTimer = setTimeout(function() {
+    if (document.getElementById("showMemberMatches").value === filterText) {
+      document.getElementById("showMemberMatches").value = "";
+      document.getElementById("copiedText").value = "";
+      filterMemberTable();
+    }
+  }, CLEAR_SEARCH_AFTER_ACTION_MS);
 }
 
 function input(e){
