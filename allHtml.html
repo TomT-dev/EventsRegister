@@ -101,27 +101,18 @@ body {
 
   body.pc-mode #rightSide {
     width: 100% !important;
-    align-items: stretch;
+    align-items: center;
   }
 
-  body.pc-mode #topBox,
-  body.pc-mode #rightArea,
   body.pc-mode #rightArea2 {
-    width: 100%;
-  }
-
-  body.pc-mode #rightArea > div,
-  body.pc-mode #rightArea2 > div {
+    width: 96vw;
     margin-left: 2vw !important;
     margin-right: 2vw !important;
   }
 
-  body.pc-mode #eventsList {
-    width: 70vw !important;
-  }
-
-  body.pc-mode #showMemberMatches {
-    width: 65vw !important;
+  body.pc-mode #rightArea2 > div {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
   }
 
   body.pc-mode .tableFixHead {
@@ -723,7 +714,7 @@ document.addEventListener('DOMContentLoaded', enableLoginEnter);
 		</div>
 		<div id="rightSide" class="split right">
         <div id="topBox">
-          <div class="instructions-grid-container">
+          <div class="instructions-grid-container" style="display:grid; grid-template-columns: auto auto minmax(24vw, 1fr) auto auto; align-items:center; column-gap:.5vw;">
             <div class="grid-item.ip">
               <button id="showKbd" onclick="showKeyboard(false)" style="border-radius: 4px; align:left;  border:none; background-color:white; outline: none;"><i class="material-icons nav" id="showKbdIcon" style="width:100%; height:auto; color:#005ab8; "><span class="material-icons">keyboard_hide</span></i></button>
             </div>
@@ -731,7 +722,7 @@ document.addEventListener('DOMContentLoaded', enableLoginEnter);
               <button id="toggleRegisterLayout" onclick="toggleRegisterLayoutMode()" style="border-radius: 4px; align:left; border:none; background-color:white; outline: none;"><i class="material-icons nav" id="registerLayoutIcon" style="width:100%; height:auto; color:#005ab8;"><span class="material-icons">fullscreen</span></i></button>
             </div>
             <div class="grid-item.ip">
-              <p id="mainInstructions" style="color:#005ab8; font-weight:bold; font-size:1vw; height:1vw; margin-left:.5vw;"></p>
+              <p id="mainInstructions" style="color:#005ab8; font-weight:bold; font-size:1vw; min-height:1.4vw; margin:.1vw 0 .1vw .5vw;"></p>
             </div>
             <div class="grid-item.ip" id="fullscreenIconSlot"></div>
             <div class="grid-item.ip" id="closeIconSlot">
