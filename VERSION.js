@@ -82,6 +82,13 @@ const VERSION_HISTORY = [
     machine: 'tom-HP-Pavilion-Laptop-16-af0xxx',
     changes: 'Fix member action handling for multi-part names and delay search reset after member action'
   }
+  ,
+  {
+    version: 83,
+    date: '2026-09-26 07:34',
+    machine: 'tom-HP-Pavilion-Laptop-16-af0xxx',
+    changes: 'Fix desktop register bugs and make desktop register the default mode'
+  }
     // Add new entries above this line
 ];
 
